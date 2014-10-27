@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html ng-app="policeUK">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Police UK Demo App">
+    <meta name="author" content="goGeo.io">
+
+    <title>goGeo - Police UK Demo App</title>
+
+    <!-- Bootstrap and bootstrap-tour css -->
+    <link href="assets/css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="assets/css/bootstrap/bootstrap-tour-standalone.min.css" rel="stylesheet" />
+    <link href="assets/css/bootstrap/font-awesome.min.css" rel="stylesheet">
+
+    <!-- Leaflet and leaflet-plugins css -->
+    <link href="assets/css/leaflet/leaflet.css" rel="stylesheet" />
+    <link href="assets/css/leaflet/plugins/draw/leaflet.draw.css" rel="stylesheet" />
+    <link href="assets/css/leaflet/plugins/tilecluster/MarkerCluster.Default.css" rel="stylesheet" />
+    <link href="assets/css/leaflet/plugins/tilecluster/MarkerCluster.css" rel="stylesheet" />
+
+    <!-- App css -->
+    <link href="assets/css/app.css" rel="stylesheet" />
+  </head>
+
+  <body>
+
+    <div id="map" ng-controller="MapController as mapCtrl">
+      <leaflet class="custom-popup" center="london" layers="layers" overlays="overlays" controls="controls" width="100%" height="990px"></leaflet>
+    </div>
+
+    <div id="geoagg-result-div" class="well">
+      <div id="geoagg-result">
+        <div class="geoagg-result-subtitle" ng-controller="TourController">
+          <h4>
+            Real-time Geo Aggregation
+            <a id="help-button" href="#" class="pull-left" ng-click="startTour(true)">
+              <i class="fa fa-question-circle"></i>
+            </a>
+          </h4>
+        </div>
+
+        <div class="geoagg-result-title">
+          <div class="row">
+            <div class="col-md-3 col-md-offset-3">
+            </div>
+            <div class="col-md-3 col-md-offset-1" style="right: -10px;">
+              <a href="http://gogeo.io" target="_blank">
+                <img src="assets/img/gogeo-brand.png" height="200%" width="200%">
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div ng-controller="DashboardController as dashboardCtrl">
+          <div>
+            <div class="row">
+              <div class="col-lg-5">
+                <b>Total Count</b>
+              </div>
+              <div class="col-lg-5">
+                <h5 id="geoagg-result-qtd" class="pull-right">{{ totalCount || "" | formatPercent:0}}</h5>
+              </div>
+            </div>
+          </div>
+          <div class="geoagg-result-by">
+            <div class="row">
+              <h5>
+                  <b>Crimes by Police Force</b>
+              </h5>
+            </div>
+          </div>
+          <div class="geoagg-result-body">
+            <div class="row">
+              <div class="col-lg-12" style="margin-left: -8px;">
+                <table id="geoagg-result-list">
+                  <tbody>
+                    <tr dir-paginate="item in geoAggList | itemsPerPage:pageSize" current-page="currentPage">
+                      <td>
+                        <div class="container result">
+                          <div class="row">
+                            <div class="progress">
+                              <div class="progress-bar" role="progressbar" aria-valuenow="{{item.percent}}" aria-valuemin="0" aria-valuemax="100" style="width: {{ item.percent }}%;">
+                                <div class="col-md-8 label-name">{{ item.key | capitalize:true }}</div>
+                                <div class="col-md-6 label-value">{{ item.value | formatPercent:0 }} ( {{ item.percent | formatPercent:2 }}% )</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div style="margin-top: {{ margin_pagination }}px; margin-bottom: {{ margin_pagination }}px;">
+                  <div class="text-center">
+                    <dir-pagination-controls boundary-links="true" direction-links="false" template-url="assets/javascript/lib/angular/dirPagination.tpl.html"></dir-pagination-controls>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row row-data-info">
+              <p>
+                <div class="col-md-12 col-md-offset-1">
+                  <b>22 Millions Crimes Data from London UK</b>
+                </div>
+              </p>
+            </div>
+            <div class="row text-center" style="position: absolute; margin: 0px; color: red;">
+              <div class="col-md-12">
+                <b>
+                  Want develop an application like this? <br> Try <a href="http://gogeo.io" target="_blank">goGeo</a>
+                  and fork me at <a href="https://github.com/gogeolbs/police-uk" target="_blank">Github.</a>
+                </b>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JQuery and bootstrap javascripts -->
+    <script src="assets/javascript/lib/jquery/jquery.min.js"></script>
+    <script src="assets/javascript/lib/jquery/jquery.number.min.js"></script>
+    <script src="assets/javascript/lib/bootstrap/bootstrap.min.js"></script>
+    <script src="assets/javascript/lib/bootstrap/bootstrap-tour-standalone.min.js"></script>
+
+    <!-- Google maps javascript -->
+    <script src="assets/javascript/lib/google/maps.js"></script>
+
+    <!-- Leaflet and leaflet-plugins javascripts -->
+    <script src="assets/javascript/lib/leaflet/leaflet.js"></script>
+    <script src="assets/javascript/lib/leaflet/plugins/draw/leaflet.draw.js"></script>
+    <script src="assets/javascript/lib/leaflet/plugins/tilecluster/leaflet.tilecluster.js"></script>
+    <script src="assets/javascript/lib/leaflet/plugins/layer/tile/Google.js"></script>
+
+    <!-- Angular and angular-leaflet-directive javascripts -->
+    <script src="assets/javascript/lib/angular/angular.min.js"></script>
+    <script src="assets/javascript/lib/angular/angular-leaflet-directive.js"></script>
+
+    <script src="assets/javascript/lib/angular/dirPagination.js"></script>
+
+    <!-- Charts javascripts -->
+    <script src="assets/javascript/lib/d3/d3.js"></script>
+    <script src="assets/javascript/lib/d3/d3plus.js"></script>
+
+    <!-- Angular (controllers, services, directives, etc) javascripts -->
+    <script src="assets/javascript/app.js"></script>
+    <script src="assets/javascript/controllers/chartsController.js"></script>
+    <script src="assets/javascript/controllers/mapController.js"></script>
+    <script src="assets/javascript/controllers/dashboardController.js"></script>
+    <script src="assets/javascript/controllers/tourController.js"></script>
+    <script src="assets/javascript/services.js"></script>
+  </body>
+</html>

@@ -1,0 +1,148 @@
+/*Don't show leaflet control layers*/
+
+.leaflet-control-layers.leaflet-control {
+  display: none;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  width: 100%;
+  height: 500px;
+}
+
+.row.row-data-info {
+  margin: -25px -30px 5px !important;
+}
+
+.custom-popup .leaflet-popup-content-wrapper {
+  background: white;
+  color: #fff;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.custom-popup .leaflet-popup-content {
+  height: 400px;
+  width: 400px !important;
+}
+
+.custom-popup .leaflet-popup-content-wrapper a {
+  color:rgba(255,255,255,0.5);
+}
+
+.custom-popup .leaflet-popup-tip-container {
+  width: 40px !important;
+  height: 40px !important;
+}
+
+.graph-div {
+  color: black;
+  font-size: 12px;
+}
+
+.custom-popup .leaflet-popup-tip {
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 15px solid white;
+  margin: -14px auto 0px;
+  height: 22px;
+}
+
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background: white;
+
+  box-shadow: 0 3px 14px rgba(0,0,0,0.4);
+}
+
+/* ---------------------------------------------------- */
+/*                                                      */
+/*                    GeoAggregation                    */
+/*                                                      */
+/* ---------------------------------------------------- */
+
+#geoagg-result-div {
+  width: 335px;
+  height: 680px;
+  position: absolute;
+  z-index: 1001;
+  right: 3px;
+  top: 3px;
+  background: white;
+  border-radius: 10px;
+  opacity: 0.8;
+}
+
+#geoagg-result-div #geoagg-result .geoagg-result-title {
+  margin: -5px 0px 5px 20px;
+}
+
+#geoagg-result-div #geoagg-result .geoagg-result-subtitle {
+  margin: -15px 0px 0px 0px;
+  text-align: center;
+}
+
+#geoagg-result-div #geoagg-result .geoagg-result-by {
+  margin: -10px 0px 0px 80px;
+}
+
+#geoagg-result-div tr {
+  border: solid;
+  border-width: 1px 0;
+  border-style: dashed;
+  border-color: #b6b5b5;
+}
+
+#geoagg-result-div td {
+  padding: 8px;
+}
+
+#geoagg-result-div tr {
+  border: none;
+}
+
+#close-geoagg-result {
+  margin-top: -31px;
+  margin-right: 51px;
+}
+
+#geoagg-result-list {
+  width: 300px;
+}
+
+#geoagg-result-list tr td .result {
+  width: 105%;
+  height: 22px;
+}
+
+#geoagg-result-qtd {
+  margin-top: 5px;
+  margin-right: -20px;
+}
+
+.progress {
+  position: relative;
+}
+
+.progress .label-name {
+  position: absolute;
+  display: block;
+  color: black;
+}
+
+.progress .label-value {
+  position: absolute;
+  display: block;
+  left: 160px;
+  color: black;
+}
