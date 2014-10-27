@@ -34,26 +34,6 @@ var DashboardController = function($scope, $rootScope, leafletData, services) {
               }
             );
 
-            $scope.others = $scope.geoAggList.slice(65, -1);
-            $scope.geoAggList = $scope.geoAggList.slice(0, 65);
-
-            if ($scope.others.length > 0) {
-              var other = {
-                key: 'Others Places',
-                value: 0,
-                percent: 0
-              };
-
-              $scope.others.forEach(
-                function(item) {
-                  other.value += item.value;
-                  other.percent += parseFloat(item.percent);
-                }
-              );
-
-              $scope.geoAggList.push(other);
-            }
-
             if ($scope.geoAggList.length < $scope.pageSize) {
               $scope.margin_pagination = 0;
             } else {

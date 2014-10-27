@@ -10,7 +10,8 @@
           return {
             protocol: 'http://',
             url: '192.168.88.143:9090',
-            subdomains: ['m1', 'm2', 'm3'],
+            // subdomains: ['m1', 'm2', 'm3'],
+            subdomains: [],
             database: 'db1',
             collection: 'police_uk_500k_2',
             mapkey: '123'
@@ -26,6 +27,7 @@
         configureUrl: function(serviceName) {
 
           var prefix = 'maps.';
+          var prefix = '';
           if (this.canUseSubdomains(serviceName)) {
             prefix = '{s}.';
           }
@@ -43,6 +45,7 @@
           var serviceName = 'tile.png';
 
           var prefix = 'maps.';
+          prefix = '';
           if (this.canUseSubdomains(serviceName)) {
             prefix = '{s}.';
           }

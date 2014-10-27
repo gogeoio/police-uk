@@ -35,7 +35,8 @@ var TourController = function($scope, $compile) {
         placement: 'left'
       },
       {
-        element: '.leaflet-marker-icon.marker-cluster.marker-cluster-extra-large.leaflet-zoom-animated.leaflet-clickable',
+        // element: '.leaflet-marker-icon.marker-cluster.marker-cluster-extra-large.leaflet-zoom-animated.leaflet-clickable',
+        orphan: true,
         title: 'Click the clusters to view a chart by type of crime.',
         next: -1,
         prev: 2,
