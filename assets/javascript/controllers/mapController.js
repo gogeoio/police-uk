@@ -62,8 +62,10 @@ var MapController = function($scope, $rootScope, $timeout, $compile, services, l
               map.closePopup($scope.popup);
             }
 
-            $scope.currentHull = polygon;
-            $scope.clusterHull.addLayer(polygon);
+            if (polygon) {
+              $scope.currentHull = polygon;
+              $scope.clusterHull.addLayer(polygon);
+            }
 
             $scope.popup = L.popup()
             .setLatLng(latlng)
@@ -79,7 +81,12 @@ var MapController = function($scope, $rootScope, $timeout, $compile, services, l
     var polygon = clusterData.polygon;
     var latlng = L.latLng(clusterData.coords[0], clusterData.coords[1]);
 
-    if (clusterData.count > 2 && polygon && polygon.toGeoJSON().geometry && polygon.toGeoJSON().geometry.coordinates && polygon.toGeoJSON().geometry.coordinates[0].length > 3) {
+    if (typeof polygon === 'array' || polygon.length == 0) {
+      console.log('')
+      polygon = null;
+    }
+
+    if (clusterData.count > 2 && polygon) {
       $scope.geojson = polygon.toGeoJSON();
 
       services.clusterGeoAggregation($scope.geojson.geometry, $scope.query,
