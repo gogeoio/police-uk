@@ -8,12 +8,30 @@
       return {
         config: function() {
           return {
-            protocol: 'https://',
-            url: 'gogeo.io',
-            subdomains: ['m1', 'm2', 'm3', 'm4'],
-            database: 'demos',
-            collection: 'police_uk',
-            mapkey: 'a9b6ed7c-0404-40e0-8c83-64cfcadd276d'
+            // protocol: 'https://',
+            // url: 'gogeo.io',
+            // subdomains: ['m1', 'm2', 'm3', 'm4'],
+            // database: 'demos',
+            // collection: 'police_uk',
+            // mapkey: 'a9b6ed7c-0404-40e0-8c83-64cfcadd276d'
+
+            // protocol: 'http://',
+            // url: '192.168.88.189:9090',
+            // subdomains: [],
+            // database: 'db1',
+            // clusterGeoAgg: 'crime_type.raw',
+            // dashboardGeoAgg: 'falls_within.raw',
+            // collection: 'police_uk',
+            // mapkey: '123'
+
+            protocol: 'http://',
+            url: '192.168.88.143:9090',
+            subdomains: [],
+            database: 'db1',
+            collection: 'police_uk_500k',
+            clusterGeoAgg: 'crime_type',
+            dashboardGeoAgg: 'falls_within',
+            mapkey: '123'
           }
         },
         canUseSubdomains: function(serviceName) {
@@ -121,7 +139,7 @@
             mapkey: this.config().mapkey,
             geom: geometry,
             agg_size: 50,
-            field: 'crime_type.raw'
+            field: this.config().clusterGeoAgg // 'crime_type.raw'
           };
 
           if (query) {
@@ -148,7 +166,7 @@
           var params = {
             mapkey: this.config().mapkey,
             agg_size: 100,
-            field: 'falls_within.raw'
+            field: this.config().dashboardGeoAgg
           };
 
           if (geometry) {

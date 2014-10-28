@@ -25,7 +25,7 @@ var MapController = function($scope, $rootScope, $timeout, $compile, services, l
   };
 
   $scope.updateDashboard = function(geoAggregation, polygon, latlng) {
-    var content = '<div class="graph-div" ng-controller="ChartsController" ng-include="\'/assets/javascript/views/bubble-chart.html\'"></div>';
+    var content = '<div class="graph-div" ng-controller="ChartsController" ng-include="\'http://demos.gogeo.io/police-uk/assets/javascript/views/bubble-chart.html\'"></div>';
 
     $scope.geoAggData = [];
     if (geoAggregation) {
@@ -118,7 +118,6 @@ var MapController = function($scope, $rootScope, $timeout, $compile, services, l
   // Create a cluster layer
   $scope.createClusterLayer = function(geom, query) {
     var options = {
-      maxZoom: 18,
       subdomains: services.config().subdomains,
       useJsonP: false,
       clickCallback: $scope.clickClusterCallback,
@@ -156,6 +155,9 @@ var MapController = function($scope, $rootScope, $timeout, $compile, services, l
       lat: 51.505,
       lng: -0.12,
       zoom: 5
+    },
+    defaults: {
+      maxZoom: 15
     },
     controls: drawOptions,
     layers: $scope.gogeoLayers

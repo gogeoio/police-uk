@@ -30,6 +30,10 @@ body {
   text-align: center;
 }
 
+.clear-input {
+  cursor: pointer;
+}
+
 .custom-popup .leaflet-popup-content-wrapper {
   background: white;
   color: #fff;

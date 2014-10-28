@@ -21,7 +21,9 @@ var QueryController = function($scope, $rootScope, services) {
   };
 
   $scope.clearQuery = function() {
-    $scope.queryText = null;
-    $scope.applyQuery();
+    if ($scope.queryText) {
+      $scope.queryText = null;
+      $scope.applyQuery();
+    }
   }
 };
