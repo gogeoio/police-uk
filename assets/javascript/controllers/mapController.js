@@ -79,7 +79,7 @@ var MapController = function($scope, $rootScope, $timeout, $compile, services, l
     var polygon = clusterData.polygon;
     var latlng = L.latLng(clusterData.coords[0], clusterData.coords[1]);
 
-    if (clusterData.count > 2 && polygon.toGeoJSON().geometry && polygon.toGeoJSON().geometry.coordinates && polygon.toGeoJSON().geometry.coordinates[0].length > 3) {
+    if (clusterData.count > 2 && polygon && polygon.toGeoJSON().geometry && polygon.toGeoJSON().geometry.coordinates && polygon.toGeoJSON().geometry.coordinates[0].length > 3) {
       $scope.geojson = polygon.toGeoJSON();
 
       services.clusterGeoAggregation($scope.geojson.geometry, $scope.query,
