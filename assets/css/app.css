@@ -24,6 +24,12 @@ body {
   margin: -25px -30px 5px !important;
 }
 
+.unable-draw-chart-info {
+  margin-top: -250px;
+  width: 400px;
+  text-align: center;
+}
+
 .custom-popup .leaflet-popup-content-wrapper {
   background: white;
   color: #fff;

@@ -24,56 +24,65 @@ var MapController = function($scope, $rootScope, $timeout, $compile, services, l
     }
   };
 
-  $scope.clickClusterCallback = function(event, clusterData) {
-    var polygon = clusterData.polygon;
+  $scope.updateDashboard = function(geoAggregation, polygon, latlng) {
+    var content = '<div class="graph-div" ng-controller="ChartsController" ng-include="\'/assets/javascript/views/bubble-chart.html\'"></div>';
 
-    var latlng = L.latLng(clusterData.coords[0], clusterData.coords[1]);
+    $scope.geoAggData = [];
+    if (geoAggregation) {
+      geoAggregation.buckets.forEach(
+        function(bucket, index) {
+          var item = {
+            value: bucket.doc_count,
+            name: bucket.key,
+            group: 'Crime types'
+          };
 
-    $scope.geojson = polygon.toGeoJSON();
+          $scope.geoAggData.push(item);
+        }
+      );
+    }
 
-    services.clusterGeoAggregation($scope.geojson.geometry,
-      function(geoAggregation) {
-        var content = '<div class="graph-div" ng-controller="ChartsController" ng-include="\'/assets/javascript/views/custom-geo-aggregation.html\'"></div>';
+    $scope.$apply(
+      function() {
+        leafletData.getMap().then(
+          function(map) {
+            if (!map.hasLayer($scope.clusterHull)) {
+              map.addLayer($scope.clusterHull);
+            }
 
-        $scope.geoAggData = [];
-        geoAggregation.buckets.forEach(
-          function(bucket, index) {
-            var item = {
-              value: bucket.doc_count,
-              name: bucket.key,
-              group: 'Crime types'
-            };
+            if ($scope.popup) {
+              $scope.removeCurrentHull();
+              map.closePopup($scope.popup);
+            }
 
-            $scope.geoAggData.push(item);
-          }
-        );
+            $scope.currentHull = polygon;
+            $scope.clusterHull.addLayer(polygon);
 
-        $scope.$apply(
-          function() {
-            leafletData.getMap().then(
-              function(map) {
-                if (!map.hasLayer($scope.clusterHull)) {
-                  map.addLayer($scope.clusterHull);
-                }
-
-                if ($scope.popup) {
-                  $scope.removeCurrentHull();
-                  map.closePopup($scope.popup);
-                }
-
-                $scope.currentHull = polygon;
-                $scope.clusterHull.addLayer(polygon);
-
-                $scope.popup = L.popup()
-                .setLatLng(latlng)
-                .setContent(content)
-                .openOn(map);
-              }
-            );
+            $scope.popup = L.popup()
+            .setLatLng(latlng)
+            .setContent(content)
+            .openOn(map);
           }
         );
       }
     );
+  };
+
+  $scope.clickClusterCallback = function(event, clusterData) {
+    var polygon = clusterData.polygon;
+    var latlng = L.latLng(clusterData.coords[0], clusterData.coords[1]);
+
+    if (clusterData.count > 2) {
+      $scope.geojson = polygon.toGeoJSON();
+
+      services.clusterGeoAggregation($scope.geojson.geometry, $scope.query,
+        function(result) {
+          $scope.updateDashboard(result, polygon, latlng);
+        }
+      );
+    } else {
+      $scope.updateDashboard(null, polygon, latlng);
+    }
   };
 
   $scope.$on('leafletDirectiveMap.popupopen',
@@ -115,17 +124,10 @@ var MapController = function($scope, $rootScope, $timeout, $compile, services, l
       clickCallback: $scope.clickClusterCallback,
       formatCount: function(count) {
         return $.number(count, 0, '.', '.');
-      },
-      calculateClusterQtd: function(zoom) {
-        if (zoom >= 5) {
-          return 2;
-        } else {
-          return 1;
-        }
       }
     };
 
-    var clusterUrl = services.clusterUrl(geom);
+    var clusterUrl = services.clusterUrl(geom, query);
     var cluster = L.tileCluster(clusterUrl, options);
 
     return  {
@@ -162,7 +164,7 @@ var MapController = function($scope, $rootScope, $timeout, $compile, services, l
   $scope.$watch('london.zoom',
     function(zoom) {
       $scope.handlerLayers(zoom);
-      $rootScope.$emit('event:updateGeoAggregation', $scope.geom);
+      $rootScope.$emit('event:updateGeoAggregation', $scope.geom, $scope.query);
       $scope.closePopup();
     }
   );
@@ -172,14 +174,25 @@ var MapController = function($scope, $rootScope, $timeout, $compile, services, l
       $scope.zoom = zoom;
     }
     var overlays = $scope.gogeoLayers.overlays;
-    if ($scope.geom !== $scope.newGeom) {
-      delete overlays.cluster;
-      $scope.geom = $scope.newGeom;
 
+    var toUpdate = false;
+
+    if ($scope.geom !== $scope.newGeom) {
+      $scope.geom = $scope.newGeom;
+      toUpdate = true;
+    }
+
+    if ($scope.query !== $scope.newQuery) {
+      $scope.query = $scope.newQuery;
+      toUpdate = true;
+    }
+
+    if (toUpdate) {
+      delete overlays.cluster;
       $timeout(
         function() {
-          overlays.cluster = $scope.createClusterLayer($scope.geom);
-          $rootScope.$emit('event:updateGeoAggregation', $scope.geom);
+          overlays.cluster = $scope.createClusterLayer($scope.geom, $scope.query);
+          $rootScope.$emit('event:updateGeoAggregation', $scope.geom, $scope.query);
         }
       );
     }
@@ -212,4 +225,12 @@ var MapController = function($scope, $rootScope, $timeout, $compile, services, l
   $scope.$on('leafletDirectiveMap.draw:created', $scope.drawHandler);
   $scope.$on('leafletDirectiveMap.draw:deleted', $scope.drawHandler);
   $scope.$on('leafletDirectiveMap.draw:edited', $scope.drawHandler);
+
+  $rootScope.$on('event:queryChanged',
+    function(event, newQuery) {
+      $scope.newQuery = newQuery;
+      $scope.handlerLayers($scope.zoom);
+      $scope.closePopup();
+    }
+  );
 };

@@ -9,12 +9,11 @@
         config: function() {
           return {
             protocol: 'http://',
-            url: '192.168.88.143:9090',
-            // subdomains: ['m1', 'm2', 'm3'],
-            subdomains: [],
-            database: 'db1',
-            collection: 'police_uk_500k_2',
-            mapkey: '123'
+            url: '',
+            subdomains: ['m1', 'm2', 'm3'],
+            database: '',
+            collection: '',
+            mapkey: ''
           }
         },
         canUseSubdomains: function(serviceName) {
@@ -104,6 +103,9 @@
           }
 
           if (query) {
+            if (typeof query === 'object') {
+              query = JSON.stringify(query);
+            }
             url = url + '&q=' + query;
           }
 
@@ -111,12 +113,11 @@
         },
         geoAggUrl: function() {
           var serviceName = 'geoagg';
-          // console.log('this.config()', this.config());
           var url = this.configureUrl(serviceName);
           var geoAggUrl = [url, serviceName, this.config().database, this.config().collection].join('/');
           return geoAggUrl;
         },
-        clusterGeoAggregation: function(geometry, callback) {
+        clusterGeoAggregation: function(geometry, query, callback) {
           var url = this.geoAggUrl();
 
           var params = {
@@ -125,6 +126,14 @@
             agg_size: 50,
             field: 'crime_type'
           };
+
+          if (query) {
+            if (typeof query === 'string') {
+              query = JSON.parse(query);
+            }
+
+            params['q'] = query;
+          }
 
           $http.post(url, params).success(
             function(result) {
@@ -136,7 +145,7 @@
             }
           );
         },
-        dashboardGeoAggregation: function(points, geometry, callback) {
+        dashboardGeoAggregation: function(points, geometry, query, callback) {
           var url = this.geoAggUrl();
 
           var params = {
@@ -152,6 +161,10 @@
               top_right: points[0],
               bottom_left: points[1]
             };
+          }
+
+          if (query) {
+            params['q'] = query;
           }
 
           $http.post(url, params).success(

@@ -12,13 +12,13 @@ var DashboardController = function($scope, $rootScope, leafletData, services) {
   $scope.pageSize = 11;
   $scope.margin_pagination = -15;
 
-  $scope.requestGeoAggregation = function(geom) {
+  $scope.requestGeoAggregation = function(geom, query) {
     leafletData.getMap().then(
       function(map) {
         var bounds = map.getBounds();
         var points = $scope.getNeSwPoints(bounds);
 
-        services.dashboardGeoAggregation(points, geom,
+        services.dashboardGeoAggregation(points, geom, query,
           function(result) {
             $scope.geoAggList = [];
             $scope.totalCount = result.doc_total;
@@ -46,8 +46,8 @@ var DashboardController = function($scope, $rootScope, leafletData, services) {
   };
 
   $rootScope.$on('event:updateGeoAggregation',
-    function(event, geom) {
-      $scope.requestGeoAggregation(geom);
+    function(event, geom, query) {
+      $scope.requestGeoAggregation(geom, query);
     }
   );
 };
