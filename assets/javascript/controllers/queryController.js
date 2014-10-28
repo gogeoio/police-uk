@@ -19,4 +19,9 @@ var QueryController = function($scope, $rootScope, services) {
 
     $rootScope.$emit('event:queryChanged', $scope.query);
   };
+
+  $scope.clearQuery = function() {
+    $scope.queryText = null;
+    $scope.applyQuery();
+  }
 };

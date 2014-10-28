@@ -11,6 +11,8 @@
     <!-- Bootstrap and bootstrap-tour css -->
     <link href="assets/css/bootstrap/bootstrap.min.css" rel="stylesheet" />
     <link href="assets/css/bootstrap/bootstrap-tour-standalone.min.css" rel="stylesheet" />
+
+    <!-- Font-awesome css -->
     <link href="assets/css/bootstrap/font-awesome.min.css" rel="stylesheet">
 
     <!-- Leaflet and leaflet-plugins css -->
@@ -33,9 +35,12 @@
       <div class="row">
         <div class="col-md-2 col-md-offset-4">
           <div style="position: absolute; top: 5px; z-index: 1000; background-color: rgba(255, 255, 255, 0.0); width: 500px;">
-            <form ng-submit="applyQuery()">
-              <input ng-model="queryText" type="text" class="form-control" placeholder="Search">
-            </form>
+            <div class="form-group has-feedback">
+              <form class="" ng-submit="applyQuery()">
+                <input ng-model="queryText" type="text" class="form-control" placeholder="Search">
+                <i class="glyphicon glyphicon-remove form-control-feedback clear-input" ng-click="clearQuery()" style="top: 0px;"></i>
+              </form>
+            </div>
           </div>
         </div>
       </div>
