@@ -82,7 +82,6 @@ var MapController = function($scope, $rootScope, $timeout, $compile, services, l
     var latlng = L.latLng(clusterData.coords[0], clusterData.coords[1]);
 
     if (typeof polygon === 'array' || polygon.length == 0) {
-      console.log('')
       polygon = null;
     }
 
