@@ -249,7 +249,7 @@ L.TileCluster = L.Class.extend({
     if (this.options.pointerCursor) {
       this._container.style.cursor = '';
     }
-    
+
     this._map.removeLayer(this._group);
   },
 
@@ -257,9 +257,14 @@ L.TileCluster = L.Class.extend({
     var ch = this._convexHull;
 
     if (ch && this._map.hasLayer(ch)) {
-      this._map.removeLayer(ch);
+      try {
+        this._map.removeLayer(ch);
+      } catch (e) {
+        // console.log('ch', ch);
+        // console.error('error on REMOVE convex hull', e);
+      }
     }
-    
+
     this._convexHull = null;
   },
 
@@ -333,7 +338,14 @@ L.TileCluster = L.Class.extend({
       if (data.count >= 2) {
         var wkt = data.stats.hull;
         this._convexHull = this._wktToPolygon(wkt);
-        this._map.addLayer(this._convexHull);
+        if (this._convexHull) {
+          try {
+            this._map.addLayer(this._convexHull);
+          } catch (e) {
+            // console.log('wkt', wkt, 'convex hull', this._convexHull);
+            // console.error('error on draw convex hull', e);
+          }
+        }
       }
     }
   },
