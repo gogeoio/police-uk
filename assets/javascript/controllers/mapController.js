@@ -25,7 +25,15 @@ var MapController = function($scope, $rootScope, $timeout, $compile, services, l
   };
 
   $scope.updateDashboard = function(geoAggregation, polygon, latlng) {
-    var content = '<div class="graph-div" ng-controller="ChartsController" ng-include="\'http://demos.gogeo.io/police-uk/assets/javascript/views/bubble-chart.html\'"></div>';
+    var pathname = window.location.pathname.trim();
+
+    if (pathname.lastIndexOf('/') !== (pathname.length - 1)) {
+      console.log('pathname', pathname);
+      pathname = pathname + '/';
+    }
+
+    var path = '\'' + pathname + 'assets/javascript/views/bubble-chart.html\'';
+    var content = '<div class="graph-div" ng-controller="ChartsController" ng-include="' + path + '"></div>';
 
     $scope.geoAggData = [];
     if (geoAggregation) {
@@ -154,10 +162,10 @@ var MapController = function($scope, $rootScope, $timeout, $compile, services, l
     london: {
       lat: 51.505,
       lng: -0.12,
-      zoom: 5
+      zoom: 6
     },
     defaults: {
-      maxZoom: 15
+      maxZoom: 18
     },
     controls: drawOptions,
     layers: $scope.gogeoLayers

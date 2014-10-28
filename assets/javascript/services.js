@@ -13,8 +13,8 @@
             subdomains: ['m1', 'm2', 'm3', 'm4'],
             database: 'demos',
             collection: 'police_uk',
-            clusterGeoAgg: 'crime_type.raw',
-            dashboardGeoAgg: 'falls_within.raw',
+            clusterGeoAgg: 'crime_type',
+            dashboardGeoAgg: 'falls_within',
             mapkey: 'a9b6ed7c-0404-40e0-8c83-64cfcadd276d'
           }
         },
@@ -51,7 +51,7 @@
           var url = this.configureUrl(prefix);
 
           var database = this.config().database;
-          // var collection = this.config().collection;
+          var collection = this.config().collection;
           var mapkey = this.config().mapkey;
 
           url = url + '/map/' + database + '/' + collection;

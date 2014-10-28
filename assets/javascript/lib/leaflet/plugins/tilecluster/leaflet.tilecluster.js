@@ -373,25 +373,33 @@ L.TileCluster = L.Class.extend({
   _defaultIconCreateFunction: function(cluster) {
     var childCount = cluster.count;
 
+    var smallRange = 1000;
+    var mediumRange = 100000;
+    var largeRange = 1000000;
+    var xlRange = 5000000;
+
     var c = ' marker-cluster-';
-    if (childCount < 100) {
-      c += 'small';
-    } else if (childCount < 10000) {
-      c += 'medium';
-    } else if (childCount < 100000) {
-      c += 'large';
-    } else {
+    if (childCount >= xlRange) {
       c += 'extra-large';
+    } else if (childCount >= largeRange) {
+      c += 'large';
+    } else if (childCount >= mediumRange) {
+      c += 'medium';
+    } else {
+      c += 'small';
     }
 
-    var iconPoint = new L.Point(40, 40);
+    var iconPoint = new L.Point(50, 50);
     var klass = 'small';
 
-    if (childCount >= 100000) {
-      iconPoint = new L.Point(55, 55);
+    if (childCount >= xlRange) {
+      iconPoint = new L.Point(70, 70);
+      klass = 'extra-large';
+    } else if (childCount >= largeRange) {
+      iconPoint = new L.Point(65, 65);
       klass = 'large';
-    } else if (childCount >= 10000) {
-      iconPoint = new L.Point(45, 45);
+    } else if (childCount >= mediumRange) {
+      iconPoint = new L.Point(55, 55);
       klass = 'medium';
     }
 
