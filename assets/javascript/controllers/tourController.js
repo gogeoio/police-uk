@@ -35,12 +35,17 @@ var TourController = function($scope, $compile) {
         placement: 'left'
       },
       {
-        // element: '.leaflet-marker-icon.marker-cluster.marker-cluster-extra-large.leaflet-zoom-animated.leaflet-clickable',
         orphan: true,
         title: 'Click the clusters to view a chart by type of crime.',
+        next: 4,
+        prev: 2
+      },
+      {
+        element: '#help-button',
+        title: 'Click the help button to see this tour again.',
         next: -1,
-        prev: 2,
-        placement: 'bottom'
+        prev: 3,
+        placement: 'left'
       }
     ]
   });

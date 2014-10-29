@@ -13,6 +13,10 @@ var QueryController = function($scope, $rootScope, services) {
           }
         }
       };
+
+      if (window._gaq) {
+        _gaq.push(['_trackEvent', 'police-uk', 'search', $scope.queryText]);
+      }
     } else {
       $scope.query = null;
     }

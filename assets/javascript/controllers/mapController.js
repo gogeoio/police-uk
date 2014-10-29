@@ -228,6 +228,10 @@ var MapController = function($scope, $rootScope, $timeout, $compile, services, l
     if (layer) {
       var geojson = layer.toGeoJSON();
       $scope.newGeom = JSON.stringify(geojson.geometry);
+
+      if (window._gaq) {
+        _gaq.push(['_trackEvent', 'police-uk', 'draw:created']);
+      }
     } else {
       $scope.newGeom = null;
       $scope.closePopup();

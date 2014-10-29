@@ -4,7 +4,7 @@ var ChartsController = function($scope, $rootScope) {
   $scope.drawChart = function() {
     if ($scope.geoAggData && $scope.geoAggData.length > 0) {
       // instantiate d3plus
-      var visualization = d3plus.viz()
+      d3plus.viz()
         .container('#viz')              // container DIV to hold the visualization
         .data($scope.geoAggData)        // data to use with the visualization
         .type('bubbles')                // visualization type
@@ -14,6 +14,11 @@ var ChartsController = function($scope, $rootScope) {
         .color('name')                  // color by each group
         .legend({value: false})
         .draw()                         // finally, draw the visualization!
+
+      if (window._gaq) {
+        _gaq.push(['_trackEvent', 'police-uk', 'chart']);
+      }
     }
+
   }
 };
