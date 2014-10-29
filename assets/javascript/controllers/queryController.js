@@ -21,6 +21,7 @@ var QueryController = function($scope, $rootScope, services) {
     'Shoplifting',
     'Theft from the person',
     'Vehicle crime',
+    'Violent crime',
     'Violence and sexual offences'
   ];
 
