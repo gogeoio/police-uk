@@ -21,7 +21,7 @@ body {
 }
 
 .row.row-data-info {
-  margin: -25px -30px 5px !important;
+  margin: -15px -5px 5px !important;
 }
 
 .unable-draw-chart-info-div {
@@ -39,11 +39,12 @@ body {
   cursor: pointer;
 }
 
-/* -------------------------------------------------------------- */
+/* ---------------------------------------------------- */
+/*                                                      */
+/*                      Typeahead                       */
+/*                                                      */
+/* ---------------------------------------------------- */
 
-
-
-/* -------------------------------------------------------------- */
 
 .custom-popup .leaflet-popup-content-wrapper {
   background: white;
