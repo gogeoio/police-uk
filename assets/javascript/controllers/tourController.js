@@ -4,6 +4,7 @@ var TourController = function($scope, $compile) {
   
   // Instance the tour
   $scope.tour = new Tour({
+    name: 'police-uk-tour',
     template: '<div class="popover tour">' +
         '<div class="arrow"></div>' +
         '<h3 class="popover-title"></h3>' +
