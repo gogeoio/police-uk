@@ -3,7 +3,17 @@
 var ChartsController = function($scope, $rootScope) {
   $scope.drawChart = function() {
     if ($scope.geoAggData && $scope.geoAggData.length > 0) {
-      console.log('$scope.geoAggData', $scope.geoAggData, 'length', $scope.geoAggData);
+      var length = $scope.geoAggData.length;
+      var height = 320;
+      var width = 370;
+      var margin = '-40px 10px 0px 0px';
+
+      if (length == 1) {
+        height = 300;
+        width = 350;
+        margin = '40px 0px 0px 30px';
+      }
+
       // instantiate d3plus
       d3plus.viz()
         .container('#viz')              // container DIV to hold the visualization
@@ -14,9 +24,9 @@ var ChartsController = function($scope, $rootScope) {
         .size('value')                  // key name to size bubbles
         .color('name')                  // color by each group
         .legend({value: false})
-        .margin('-40px 10px 0px 0px')
-        .width({value: 370})
-        .height({value: 320})
+        .margin(margin)
+        .width({value: width})
+        .height({value: height})
         .draw()                         // finally, draw the visualization!
 
       if (window._gaq) {
