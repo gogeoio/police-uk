@@ -260,8 +260,6 @@ L.TileCluster = L.Class.extend({
       try {
         this._map.removeLayer(ch);
       } catch (e) {
-        // console.log('ch', ch);
-        // console.error('error on REMOVE convex hull', e);
       }
     }
 
@@ -283,11 +281,16 @@ L.TileCluster = L.Class.extend({
 
         if (cluster.count >= 2) {
           var clusterIcon = this.options.createIcon(cluster);
-          var clusterMarker = L.marker(latlng,
-            {
-              icon: clusterIcon
-            }
-          );
+
+          var options = {
+            icon: clusterIcon
+          };
+
+          if (this.options.clusterTooltip && cluster.count > 2) {
+            options.title = this.options.clusterTooltip;
+          }
+
+          var clusterMarker = L.marker(latlng, options);
 
           clusterMarker.key = key;
           clusterMarker.id = i;
@@ -342,8 +345,6 @@ L.TileCluster = L.Class.extend({
           try {
             this._map.addLayer(this._convexHull);
           } catch (e) {
-            // console.log('wkt', wkt, 'convex hull', this._convexHull);
-            // console.error('error on draw convex hull', e);
           }
         }
       }

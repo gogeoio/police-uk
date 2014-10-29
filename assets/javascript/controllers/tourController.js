@@ -24,28 +24,40 @@ var TourController = function($scope, $compile) {
       },
       {
         element: '.leaflet-draw-toolbar.leaflet-bar.leaflet-draw-toolbar-top',
-        title: 'Click the rectangle to draw a spatial restriction!',
+        title: 'Click the rectangle to draw a spatial restriction.',
         next: 2,
         prev: 0
       },
       {
-        element: '#geoagg-result-div',
-        title: 'This dashboard will be updated as you interact with the map!',
+        element: '.leaflet-draw-edit-edit.leaflet-disabled',
+        title: 'Click here to edit the spatial restriction.',
         next: 3,
         prev: 1,
+      },
+      {
+        element: '.leaflet-draw-edit-remove.leaflet-disabled',
+        title: 'Click here to remove the spatial restriction.',
+        next: 4,
+        prev: 2,
+      },
+      {
+        element: '#geoagg-result-div',
+        title: 'This dashboard will be updated as you interact with the map!',
+        next: 5,
+        prev: 3,
         placement: 'left'
       },
       {
         orphan: true,
         title: 'Click the clusters to view a chart by type of crime.',
-        next: 4,
-        prev: 2
+        next: 6,
+        prev: 4
       },
       {
         element: '#help-button',
         title: 'Click the help button to see this tour again.',
         next: -1,
-        prev: 3,
+        prev: 5,
         placement: 'left'
       }
     ]

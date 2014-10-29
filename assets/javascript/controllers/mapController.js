@@ -134,6 +134,7 @@ var MapController = function($scope, $rootScope, $timeout, $compile, services, l
       subdomains: services.config().subdomains,
       useJsonP: false,
       clickCallback: $scope.clickClusterCallback,
+      clusterTooltip: 'Click here to view a chart\nby type of crime in this area.',
       formatCount: function(count) {
         return $.number(count, 0, '.', '.');
       }
@@ -162,6 +163,16 @@ var MapController = function($scope, $rootScope, $timeout, $compile, services, l
       cluster: $scope.createClusterLayer()
     }
   };
+
+  L.drawLocal.draw.toolbar.buttons.rectangle = 'Draw an area.';
+  L.drawLocal.edit.toolbar.buttons.edit = 'Edit area.'
+  L.drawLocal.edit.toolbar.buttons.editDisabled = 'No area to edit.'
+  L.drawLocal.edit.toolbar.buttons.remove = 'Delete area.'
+  L.drawLocal.edit.toolbar.buttons.removeDisabled = 'No area to delete.'
+
+  L.drawLocal.draw.handlers.rectangle.tooltip.start = 'Click and drag to draw an area';
+  L.drawLocal.edit.handlers.edit.tooltip.text = 'Drag handles to edit area.';
+  L.drawLocal.edit.handlers.remove.tooltip.text = 'Click on an area and then save to remove.';
 
   angular.extend($scope, {
     london: {
