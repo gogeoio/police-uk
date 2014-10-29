@@ -24,26 +24,38 @@ body {
   margin: -25px -30px 5px !important;
 }
 
-.unable-draw-chart-info {
-  margin-top: -250px;
-  width: 400px;
+.unable-draw-chart-info-div {
+  height: 300px !important;
+  width: 300px;
   text-align: center;
+}
+
+.unable-draw-chart-info-h3 {
+  position: absolute;
+  margin: 115px 40px 0px 10px;
 }
 
 .clear-input {
   cursor: pointer;
 }
 
+/* -------------------------------------------------------------- */
+
+
+
+/* -------------------------------------------------------------- */
+
 .custom-popup .leaflet-popup-content-wrapper {
   background: white;
   color: #fff;
   font-size: 16px;
   line-height: 24px;
+  z-index: 0;
 }
 
 .custom-popup .leaflet-popup-content {
-  height: 400px;
-  width: 400px !important;
+  height: 320px;
+  width: 350px !important;
 }
 
 .custom-popup .leaflet-popup-content-wrapper a {

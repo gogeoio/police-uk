@@ -34,10 +34,10 @@
     <div class="container" ng-controller="QueryController">
       <div class="row">
         <div class="col-md-2 col-md-offset-4">
-          <div style="position: absolute; top: 5px; z-index: 1000; background-color: rgba(255, 255, 255, 0.0); width: 400px;">
+          <div style="position: absolute; top: 5px; z-index: 1000; background-color: rgba(255, 255, 255, 0.0);">
             <div class="form-group has-feedback">
               <form class="" ng-submit="applyQuery()">
-                <input ng-model="queryText" type="text" class="form-control" placeholder="Search">
+                <input ng-model="queryText" type="text" class="form-control" ng-options="state for state in states" style="width: 400px;" placeholder="Search by crime types" bs-typeahead>
                 <i class="glyphicon glyphicon-remove form-control-feedback clear-input" ng-click="clearQuery()" style="top: 0px;"></i>
               </form>
             </div>
@@ -153,8 +153,11 @@
     <!-- Angular and angular-leaflet-directive javascripts -->
     <script src="assets/javascript/lib/angular/angular.min.js"></script>
     <script src="assets/javascript/lib/angular/angular-leaflet-directive.js"></script>
-
     <script src="assets/javascript/lib/angular/dirPagination.js"></script>
+
+    <!-- Typeahead -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-strap/2.1.2/angular-strap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-strap/2.1.2/angular-strap.tpl.min.js"></script>
 
     <!-- Charts javascripts -->
     <script src="assets/javascript/lib/d3/d3.js"></script>

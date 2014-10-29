@@ -85,7 +85,7 @@ var MapController = function($scope, $rootScope, $timeout, $compile, services, l
       polygon = null;
     }
 
-    if (clusterData.count > 2 && polygon) {
+    if (clusterData.count > 3 && polygon) {
       $scope.geojson = polygon.toGeoJSON();
 
       services.clusterGeoAggregation($scope.geojson.geometry, $scope.query,
@@ -181,7 +181,7 @@ var MapController = function($scope, $rootScope, $timeout, $compile, services, l
       zoom: 6
     },
     defaults: {
-      maxZoom: 18
+      maxZoom: 15
     },
     controls: drawOptions,
     layers: $scope.gogeoLayers

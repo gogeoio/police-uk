@@ -4,12 +4,36 @@ var QueryController = function($scope, $rootScope, services) {
 
   $scope.queryText = null;
 
+  /* --------------------------------------------------------------- */
+
+  $scope.states = [
+    'Anti-social behaviour',
+    'Bicycle theft',
+    'Burglary',
+    'Criminal damage and arson',
+    'Drugs',
+    'Other crime',
+    'Other theft',
+    'Possession of weapons',
+    'Public disorder and weapons',
+    'Public order',
+    'Robbery',
+    'Shoplifting',
+    'Theft from the person',
+    'Vehicle crime',
+    'Violence and sexual offences'
+  ];
+
+  /* --------------------------------------------------------------- */
+
   $scope.applyQuery = function() {
     if ($scope.queryText) {
+      var terms = $scope.queryText;
+
       $scope.query = {
         query: {
-          query_string: {
-            query: $scope.queryText
+          terms: {
+            crime_type: [ terms ]
           }
         }
       };
