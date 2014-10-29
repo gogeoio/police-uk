@@ -5,8 +5,8 @@ var ChartsController = function($scope, $rootScope) {
     if ($scope.geoAggData && $scope.geoAggData.length > 0) {
       var length = $scope.geoAggData.length;
       var height = 320;
-      var width = 350;
-      var margin = '-40px 10px 0px 0px';
+      var width = 370;
+      var margin = '-20px 10px 0px 0px';
 
       if (length == 1) {
         height = 300;
