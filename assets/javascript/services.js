@@ -94,7 +94,7 @@
           url = url + '?mapkey=' + mapkey;
 
           // Prevent angular cache
-          url = url + '&_=' + Math.random();
+          url = url + '&_=1';
 
           // Add geom to URL
           if (geom) {
