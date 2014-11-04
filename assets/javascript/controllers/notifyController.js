@@ -18,7 +18,7 @@ var NotifyController = function($scope, $rootScope) {
   $scope.updateText = function() {
     var text = [
       'Zoom level: ' + $scope.zoom,
-      'Processed records: ' + $.number($scope.geoAggCount + $scope.clusterCount, 0, '.', '.'),
+      'Processed records: ' + $.number($scope.geoAggCount, 0, '.', '.'),
       'Processing time: ' + $scope.geoAggTime + ' ms'
     ];
 
