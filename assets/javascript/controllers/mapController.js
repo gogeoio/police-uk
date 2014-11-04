@@ -15,7 +15,10 @@ var MapController = function($scope, $rootScope, $timeout, $compile, services, l
         polyline: false,
         polygon: false,
         circle: false, // Turns off this drawing tool
-        marker: false
+        marker: false,
+        rectangle: {
+          showArea: true
+        }
       },
       edit: {
         featureGroup: $scope.drawnItems

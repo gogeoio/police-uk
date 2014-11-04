@@ -6,19 +6,21 @@ var NotifyController = function($scope, $rootScope) {
     title: 'Metadata',
     type: 'info',
     history: false,
-    addclass: 'stack-bottomleft',
-    hide: false
+    addclass: 'stack-bottomleft custom',
+    hide: false,
+    buttons: {
+      sticker: false
+    }
   };
-  $scope.pnotify = new PNotify($scope.notify_opts);
 
-  // console.log($scope.pnotify);
+  $scope.pnotify = new PNotify($scope.notify_opts);
 
   $scope.updateText = function() {
     var text = [
       'Zoom level: ' + $scope.zoom,
-      'Dashboard processed objects: ' + $.number($scope.geoAggCount, 0, '.', '.'),
-      'Dashboard process time: ' + $scope.geoAggTime + ' ms',
-      'Cluster processed objects: ' + $.number($scope.clusterCount, 0, '.', '.')
+      'Processed objects on dashboard: ' + $.number($scope.geoAggCount, 0, '.', '.'),
+      'Dashboard processing time: ' + $scope.geoAggTime + ' ms',
+      'Processed objects in the clusters : ' + $.number($scope.clusterCount, 0, '.', '.')
     ];
 
     $scope.pnotify.update({text: text.join('\n')});
@@ -50,14 +52,4 @@ var NotifyController = function($scope, $rootScope) {
       $scope.updateText();
     }
   );
-
-  // $rootScope.$on('event:hideMetadata',
-  //   function(event) {
-  //     if ($scope.pnotify.state !== 'closed') {
-  //       console.log('hideMetadata');
-  //       $scope.pnotify.remove(0);
-  //       console.log($scope.pnotify);
-  //     }
-  //   }
-  // );
 };

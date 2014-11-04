@@ -4,9 +4,8 @@ var QueryController = function($scope, $rootScope, services) {
 
   $scope.queryText = null;
 
-  /* --------------------------------------------------------------- */
-
-  $scope.states = [
+  $rootScope.crimeTypes = [
+    '',
     'Anti-social behaviour',
     'Bicycle theft',
     'Burglary',
@@ -25,10 +24,8 @@ var QueryController = function($scope, $rootScope, services) {
     'Violence and sexual offences'
   ];
 
-  /* --------------------------------------------------------------- */
-
   $scope.applyQuery = function() {
-    if ($scope.queryText) {
+    if ($scope.queryText && $scope.queryText.length != 0) {
       var terms = $scope.queryText;
 
       $scope.query = {
