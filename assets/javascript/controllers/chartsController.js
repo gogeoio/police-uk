@@ -2,6 +2,18 @@
 
 var ChartsController = function($scope, $rootScope) {
   $scope.drawChart = function() {
+    $scope.total = 0;
+
+    $scope.geoAggData.forEach(
+      function(item) {
+        $scope.total += item.value;
+      }
+    );
+
+    $scope.format = function(number, valueString, d3Object, item) {
+      var percent = $.number((number / $scope.total) * 100, 2);
+      return percent + ' %';
+    };
 
     if ($scope.geoAggData && $scope.geoAggData.length > 0) {
       var length = $scope.geoAggData.length;
@@ -29,6 +41,7 @@ var ChartsController = function($scope, $rootScope) {
         .width({value: width})
         .height({value: height})
         .title(false)
+        .format({'number': $scope.format})
         .draw()                         // finally, draw the visualization!
 
       if (window._gaq) {
