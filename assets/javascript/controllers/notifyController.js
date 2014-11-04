@@ -3,7 +3,7 @@
 var NotifyController = function($scope, $rootScope) {
   $scope.notify_opts = {
     styling: 'bootstrap3',
-    title: 'Metadata',
+    title: 'goGeo Performance',
     type: 'info',
     history: false,
     addclass: 'stack-bottomleft custom',
@@ -18,9 +18,8 @@ var NotifyController = function($scope, $rootScope) {
   $scope.updateText = function() {
     var text = [
       'Zoom level: ' + $scope.zoom,
-      'Processed objects on dashboard: ' + $.number($scope.geoAggCount, 0, '.', '.'),
-      'Dashboard processing time: ' + $scope.geoAggTime + ' ms',
-      'Processed objects in the clusters : ' + $.number($scope.clusterCount, 0, '.', '.')
+      'Processed records: ' + $.number($scope.geoAggCount + $scope.clusterCount, 0, '.', '.'),
+      'Processing time: ' + $scope.geoAggTime + ' ms'
     ];
 
     $scope.pnotify.update({text: text.join('\n')});

@@ -201,25 +201,31 @@ L.TileCluster = L.Class.extend({
     }
   },
 
-  updateCount: function(key, data) {
-    var oldCount = this._totalCount;
-    if (data && data[0]) {
-      for (var i in data) {
-        var cluster = data[i];
+  updateCount: function() {
+    this._totalCount = 0;
 
-        if (this._tiles.hasOwnProperty(key)) {
-          this._totalCount += cluster.count;
-        } else {
-          this._totalCount -= cluster.count;
+    for (var i in this._tiles) {
+      var key = this._tiles[i];
+      // console.log('key', key);
+
+      var data = this._cache[key];
+
+      if (data && data[0]) {
+        for (var j in data) {
+          var cluster = data[j];
+
+          if (this._tiles.hasOwnProperty(key)) {
+            this._totalCount += cluster.count;
+          }
         }
       }
     }
 
-    if (oldCount != this._totalCount) {
+    // if (oldCount != this._totalCount) {
       if (this.options.updateCountCallback && typeof this.options.updateCountCallback === 'function') {
         this.options.updateCountCallback.call(this, this._totalCount);
       }
-    }
+    // }
   },
 
   _loadTileP: function(zoom, x, y) {
@@ -291,9 +297,9 @@ L.TileCluster = L.Class.extend({
       if (x < bounds.min.x || x > bounds.max.x || y < bounds.min.y || y > bounds.max.y) {
         delete this._tiles[key];
         this._removeTile(key);
-        this.updateCount(key, this._cache[key]);
       }
     }
+    this.updateCount();
   },
 
   onRemove: function() {
@@ -335,7 +341,7 @@ L.TileCluster = L.Class.extend({
   },
 
   _drawCluster: function(data, self, key, zoom) {
-    self.updateCount(key, data);
+    self.updateCount();
     // Check if the zoom of cluster is the same of map
     if (data && data[0] && zoom == this._map.getZoom()) {
       for (var i in data) {

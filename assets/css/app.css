@@ -73,6 +73,7 @@ body {
   -webkit-border-radius: 10px;
   border-radius: 10px;
   width: 310px;
+  opacity: .8;
 }
 .ui-pnotify.custom .ui-pnotify-title, .ui-pnotify.custom .ui-pnotify-text {
   font-family: Arial, Helvetica, sans-serif !important;

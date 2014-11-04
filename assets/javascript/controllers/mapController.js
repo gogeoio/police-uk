@@ -184,7 +184,7 @@ var MapController = function($scope, $rootScope, $timeout, $compile, services, l
     london: {
       lat: 51.505,
       lng: -0.12,
-      zoom: 6
+      zoom: 14
     },
     defaults: {
       maxZoom: 15
