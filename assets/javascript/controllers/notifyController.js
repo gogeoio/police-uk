@@ -20,6 +20,10 @@ var NotifyController = function($scope, $rootScope) {
       'Response time: ' + $scope.geoAggTime + ' ms'
     ];
 
+    if ($scope.drawnArea) {
+      text.push('Area size analysis: ' + $scope.drawnArea + ' km2');
+    }
+
     $scope.pnotify.update({text: text.join('\n')});
 
     if ($scope.pnotify.state === 'closed') {
@@ -46,6 +50,13 @@ var NotifyController = function($scope, $rootScope) {
   $rootScope.$on('event:updateZoom',
     function(event, zoom) {
       $scope.zoom = zoom;
+      $scope.updateText();
+    }
+  );
+
+  $rootScope.$on('event:updateDrawnArea',
+    function(event, drawnArea) {
+      $scope.drawnArea = drawnArea;
       $scope.updateText();
     }
   );

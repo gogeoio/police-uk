@@ -309,10 +309,14 @@ var MapController = function($scope, $rootScope, $timeout, $window, $compile, se
       if (window._gaq) {
         _gaq.push(['_trackEvent', 'police-uk', 'draw:created']);
       }
+
+      var area = (LGeo.area(layer) / 1000000).toFixed(2);
+      $rootScope.$emit('event:updateDrawnArea', area);
     } else {
       $scope.newGeom = null;
       $scope.closePopup();
       $scope.removeCurrentHull();
+      $rootScope.$emit('event:updateDrawnArea', null);
     }
 
     $scope.handlerLayers($scope.zoom);
