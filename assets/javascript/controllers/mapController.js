@@ -1,6 +1,6 @@
 'use strict';
 
-var MapController = function($scope, $rootScope, $timeout, $compile, services, leafletData, leafletEvents) {
+var MapController = function($scope, $rootScope, $timeout, $window, $compile, services, leafletData, leafletEvents) {
   $scope.drawnItems = new L.FeatureGroup();
   $scope.clusterHull = new L.FeatureGroup();
 
@@ -91,7 +91,9 @@ var MapController = function($scope, $rootScope, $timeout, $compile, services, l
     if (clusterData.count > 3 && polygon) {
       $scope.geojson = polygon.toGeoJSON();
 
-      services.clusterGeoAggregation($scope.geojson.geometry, $scope.query,
+      var boolQuery = $scope.getBoolQuery();
+
+      services.clusterGeoAggregation($scope.geojson.geometry, boolQuery,
         function(result) {
           $scope.updateDashboard(result, polygon, latlng);
         }
@@ -214,15 +216,37 @@ var MapController = function($scope, $rootScope, $timeout, $compile, services, l
       var layersDrawn = $scope.drawnItems.getLayers();
 
       if (layersDrawn.length == 0) {
+        var boolQuery = $scope.getBoolQuery();
+
         leafletData.getMap().then(
           function(map) {
             $scope.points = $scope.getNeSwPoints(map.getBounds());
-            $rootScope.$emit('event:updateGeoAggregation', $scope.geom, $scope.points, $scope.query)
+            $rootScope.$emit('event:updateGeoAggregation', $scope.geom, $scope.points, boolQuery);
           }
         );
       }
     }
   );
+
+  $scope.getBoolQuery = function() {
+    var boolQuery = null;
+
+    if ($scope.query && $scope.timeQuery) {
+      boolQuery = {
+        query: {
+          bool: {
+            must: [ $scope.timeQuery.query, $scope.query.query ]
+          }
+        }
+      };
+    } else if ($scope.query) {
+      boolQuery = $scope.query;
+    } else if ($scope.timeQuery) {
+      boolQuery = $scope.timeQuery;
+    }
+
+    return boolQuery;
+  };
 
   $scope.handlerLayers = function(zoom) {
     if (zoom) {
@@ -246,24 +270,9 @@ var MapController = function($scope, $rootScope, $timeout, $compile, services, l
       toUpdate = true;
     }
 
-    var boolQuery = null;
-
-    if ($scope.query && $scope.timeQuery) {
-      boolQuery = {
-        query: {
-          bool: {
-            must: [ $scope.timeQuery.query, $scope.query.query ]
-          }
-        }
-      };
-    } else if ($scope.query) {
-      boolQuery = $scope.query;
-    } else if ($scope.timeQuery) {
-      boolQuery = $scope.timeQuery;
-    }
+    var boolQuery = $scope.getBoolQuery();
 
     if (toUpdate) {
-      console.log('bool query', JSON.stringify(boolQuery, null, 2));
       $timeout(
         function() {
           delete overlays.cluster;

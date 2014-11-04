@@ -9,7 +9,7 @@ var DashboardController = function($scope, $rootScope, leafletData, services) {
   };
 
   $scope.currentPage = 1;
-  $scope.pageSize = 11;
+  $scope.pageSize = 10;
   $scope.margin_pagination = -15;
 
   $scope.requestGeoAggregation = function(geom, points, query) {

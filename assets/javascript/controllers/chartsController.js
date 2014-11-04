@@ -2,6 +2,7 @@
 
 var ChartsController = function($scope, $rootScope) {
   $scope.drawChart = function() {
+
     if ($scope.geoAggData && $scope.geoAggData.length > 0) {
       var length = $scope.geoAggData.length;
       var height = 320;
@@ -27,6 +28,7 @@ var ChartsController = function($scope, $rootScope) {
         .margin(margin)
         .width({value: width})
         .height({value: height})
+        .title(false)
         .draw()                         // finally, draw the visualization!
 
       if (window._gaq) {

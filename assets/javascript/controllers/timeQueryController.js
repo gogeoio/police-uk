@@ -1,14 +1,13 @@
 'use strict';
 
-var TimeQueryController = function($scope, $rootScope, $timeout, services) {
+var TimeQueryController = function($scope, $rootScope) {
   $scope.timelimit = {
     range: {
       min: new Date('2011-01').getTime(),
-      // max: new Date('2011-07').getTime()
       max: new Date('2014-09').getTime()
     },
     minMonth: new Date('2011-01').getTime(),
-    maxMonth: new Date('2011-07').getTime()
+    maxMonth: new Date('2014-09').getTime()
   };
 
   $scope.updateDate = function() {

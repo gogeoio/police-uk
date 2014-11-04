@@ -48,54 +48,42 @@ var TourController = function($scope, $rootScope) {
     steps: [
       {
         element: '.leaflet-control-zoom.leaflet-bar.leaflet-control',
-        title: 'Zoom in/out to change the detail level (use this buttons or your mouse wheel).',
-        next: 1,
-        prev: -1
+        title: 'Zoom in/out to change the detail level (use this buttons or your mouse wheel).'
       },
       {
         element: '.leaflet-draw-toolbar.leaflet-bar.leaflet-draw-toolbar-top',
-        title: 'Click here to draw an area for analysis.',
-        next: 2,
-        prev: 0
+        title: 'Click here to draw an area for analysis.'
       },
       {
         element: '.leaflet-draw-edit-edit.leaflet-disabled',
-        title: 'Click here to change an existing area boundaries.',
-        next: 3,
-        prev: 1,
+        title: 'Click here to change an existing area boundaries.'
       },
       {
         element: '.leaflet-draw-edit-remove.leaflet-disabled',
-        title: 'Click here to remove an area restriction',
-        next: 4,
-        prev: 2,
+        title: 'Click here to remove an area restriction'
       },
       {
         element: '#geoagg-result-div',
         title: 'Dashboard business metrics updated in real time as you interact with the map.',
-        next: 5,
-        prev: 3,
         placement: 'left'
       },
       {
         orphan: true,
-        title: 'Click on the cluster to view charts by crime type within its coverage area.',
-        next: 6,
-        prev: 4
+        title: 'Click on the cluster to view charts by crime type within its coverage area.'
       },
       {
         element: '#searchInput',
         title: 'Search by crime types',
         content: $rootScope.crimeTypes.join('\n'),
-        next: 7,
-        prev: 5,
         placement: 'bottom'
       },
       {
+        element: '.timeline-slider',
+        title: 'Change time range to filter the data. (Dec/10 - Aug/14)'
+      },
+      {
         element: '#help-button',
-        title: 'Click the help button to see this tour again.',
-        next: -1,
-        prev: 6
+        title: 'Click the help button to see this tour again.'
       }
     ]
   });

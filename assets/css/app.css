@@ -7,7 +7,7 @@
 body {
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  /*overflow: hidden;*/
 }
 
 #map {
@@ -17,7 +17,6 @@ body {
   right: 0;
   left: 0;
   width: 100%;
-  height: 500px;
 }
 
 .row.row-data-info {
@@ -41,14 +40,15 @@ body {
 
 .timeline-slider {
   position: absolute;
-  bottom: 10px;
-  left: 400px;
-  width: 200px;
+  top: 200px;
+  left: 10px;
+  height: 100px;
 }
 
 .ngrs-value {
   color: #000 !important;
   background: #B3D1FF;
+  font-size: 14px !important;
 }
 
 .ui-pnotify {
@@ -153,10 +153,10 @@ body {
 
 #geoagg-result-div {
   width: 335px;
-  height: 680px;
+  height: 650px;
   position: absolute;
   z-index: 1001;
-  right: 3px;
+  right: 10px;
   top: 3px;
   background: white;
   border-radius: 10px;

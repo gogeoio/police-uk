@@ -7,10 +7,8 @@ var NotifyController = function($scope, $rootScope) {
     type: 'info',
     history: false,
     addclass: 'stack-bottomleft custom',
-    hide: false,
-    buttons: {
-      sticker: false
-    }
+    hide: true,
+    delay: 5000
   };
 
   $scope.pnotify = new PNotify($scope.notify_opts);
@@ -19,7 +17,7 @@ var NotifyController = function($scope, $rootScope) {
     var text = [
       'Zoom level: ' + $scope.zoom,
       'Processed records: ' + $.number($scope.geoAggCount, 0, '.', '.'),
-      'Processing time: ' + $scope.geoAggTime + ' ms'
+      'Response time: ' + $scope.geoAggTime + ' ms'
     ];
 
     $scope.pnotify.update({text: text.join('\n')});
@@ -27,7 +25,7 @@ var NotifyController = function($scope, $rootScope) {
     if ($scope.pnotify.state === 'closed') {
       $scope.pnotify.open();
     }
-  }
+  };
 
   $rootScope.$on('event:updateGeoAggCount',
     function(event, time, count) {
