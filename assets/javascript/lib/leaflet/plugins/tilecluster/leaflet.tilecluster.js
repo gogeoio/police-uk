@@ -62,6 +62,7 @@ L.TileCluster = L.Class.extend({
     this._url = url;
     this._cache = {};
     this._group = L.featureGroup();
+    this._markers = L.featureGroup();
     this._jsonp_prefix = 'cl_us_ter_';
 
     this._tiles = {};
@@ -119,6 +120,7 @@ L.TileCluster = L.Class.extend({
     this._container = this._map._container;
 
     this._group.addTo(this._map);
+    this._markers.addTo(this._map);
 
     this._update();
 
@@ -189,25 +191,11 @@ L.TileCluster = L.Class.extend({
     this._removeOtherTiles(tileBounds);
   },
 
-  _removeTile: function(key) {
-    var group = this._group;
-
-    for (var index in group.getLayers()) {
-      var layer = group.getLayers()[index];
-
-      if (layer && layer.key === key) {
-        group.removeLayer(layer);
-      }
-    }
-  },
-
   updateCount: function() {
     this._totalCount = 0;
 
     for (var i in this._tiles) {
       var key = this._tiles[i];
-      // console.log('key', key);
-
       var data = this._cache[key];
 
       if (data && data[0]) {
@@ -221,11 +209,9 @@ L.TileCluster = L.Class.extend({
       }
     }
 
-    // if (oldCount != this._totalCount) {
-      if (this.options.updateCountCallback && typeof this.options.updateCountCallback === 'function') {
-        this.options.updateCountCallback.call(this, this._totalCount);
-      }
-    // }
+    if (this.options.updateCountCallback && typeof this.options.updateCountCallback === 'function') {
+      this.options.updateCountCallback.call(this, this._totalCount);
+    }
   },
 
   _loadTileP: function(zoom, x, y) {
@@ -302,6 +288,32 @@ L.TileCluster = L.Class.extend({
     this.updateCount();
   },
 
+  _removeTile: function(key) {
+    var group = this._group;
+
+    for (var index in group.getLayers()) {
+      var layer = group.getLayers()[index];
+
+      if (layer && layer.key === key) {
+        group.removeLayer(layer);
+      }
+    }
+
+    var markers = this._markers;
+
+    for (var index in markers.getLayers()) {
+      var marker = markers.getLayers()[index];
+
+      if (marker) {
+        var markerKey = marker.key;
+
+        if (key === markerKey) {
+          markers.removeLayer(marker);
+        }
+      }
+    }
+  },
+
   onRemove: function() {
     var map = this._map;
 
@@ -320,6 +332,7 @@ L.TileCluster = L.Class.extend({
     }
 
     this._map.removeLayer(this._group);
+    this._map.removeLayer(this._markers);
   },
 
   _removeConvexHull: function() {
@@ -367,7 +380,8 @@ L.TileCluster = L.Class.extend({
           this._group.addLayer(clusterMarker);
         } else if (cluster.count == 1) {
           var marker = L.marker(latlng);
-          this._group.addLayer(marker);
+          marker.key = key;
+          this._markers.addLayer(marker);
         }
       }
     }
