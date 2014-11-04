@@ -12,16 +12,24 @@ var DashboardController = function($scope, $rootScope, leafletData, services) {
   $scope.pageSize = 11;
   $scope.margin_pagination = -15;
 
-  $scope.requestGeoAggregation = function(geom, query) {
+  $scope.requestGeoAggregation = function(geom, points, query) {
     leafletData.getMap().then(
       function(map) {
-        var bounds = map.getBounds();
-        var points = $scope.getNeSwPoints(bounds);
+        if (!points && !geom) {
+          var bounds = map.getBounds();
+          points = $scope.getNeSwPoints(bounds);
+        }
 
+        var timeStart = new Date();
         services.dashboardGeoAggregation(points, geom, query,
           function(result) {
+            var timeEnd = new Date();
+
             $scope.geoAggList = [];
             $scope.totalCount = result.doc_total;
+
+            var timeElapsed = timeEnd.getTime() - timeStart.getTime();
+            $rootScope.$emit('event:updateGeoAggCount', timeElapsed, $scope.totalCount);
 
             result.buckets.forEach(
               function(bucket) {
@@ -46,8 +54,8 @@ var DashboardController = function($scope, $rootScope, leafletData, services) {
   };
 
   $rootScope.$on('event:updateGeoAggregation',
-    function(event, geom, query) {
-      $scope.requestGeoAggregation(geom, query);
+    function(event, geom, points, query) {
+      $scope.requestGeoAggregation(geom, points, query);
     }
   );
 };

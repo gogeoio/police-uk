@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('policeUK', ['leaflet-directive', 'policeUK.services', 'angularUtils.directives.dirPagination', 'mgcrea.ngStrap']);
+var app = angular.module('policeUK', ['leaflet-directive', 'policeUK.services', 'angularUtils.directives.dirPagination', 'mgcrea.ngStrap', 'ui-rangeSlider']);
 
 app.filter('capitalize',
   function() {

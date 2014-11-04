@@ -44,6 +44,7 @@ L.Util.ajax = function(url, zoom, callback) {
 };
 
 L.TileCluster = L.Class.extend({
+  includes: L.Mixin.Events,
   options: {
     subdomains: 'abc',
 
@@ -63,12 +64,15 @@ L.TileCluster = L.Class.extend({
     this._group = L.featureGroup();
     this._jsonp_prefix = 'cl_us_ter_';
 
+    this._tiles = {};
+    this._totalCount = 0;
+
     if (url.match(/callback={cb}/) && !this.options.useJsonP) {
       console.error('Must set useJsonP options if you want use a callback function!');
       return null;
     }
     
-    if (!url.match(/callback={cb}/) && this.options.useJsonP) {
+    if (!url.match(/callback={cb}/) && this.options.uoseJsonP) {
       console.error('Must add callback={cb} url param to use with JsonP mode!');
       return null;
     }
@@ -135,8 +139,6 @@ L.TileCluster = L.Class.extend({
 
   _update: function() {
 
-    this.clearClusters();
-
     var bounds = this._map.getPixelBounds(),
         zoom = this._map.getZoom(),
         tileSize = this.options.tileSize;
@@ -164,17 +166,58 @@ L.TileCluster = L.Class.extend({
 
         var key = zoom + '_' + xw + '_' + yw;
 
-        if (!this._cache.hasOwnProperty(key)) {
-          this._cache[key] = null;
+        if (!this._tiles.hasOwnProperty(key)) {
+          this._tiles[key] = key;
+          if (!this._cache.hasOwnProperty(key)) {
+            this._cache[key] = null;
 
-          if (this.options.useJsonP) {
-            this._loadTileP(zoom, xw, yw);
+            if (this.options.useJsonP) {
+              this._loadTileP(zoom, xw, yw);
+            } else {
+              this._loadTile(zoom, xw, yw);
+            }
           } else {
-            this._loadTile(zoom, xw, yw);
+            this._drawCluster(this._cache[key], this, key, zoom);
           }
-        } else {
-          this._drawCluster(this._cache[key], this, key, zoom);
         }
+      }
+    }
+
+    var tileBounds = L.bounds(
+            bounds.min.divideBy(tileSize)._floor(),
+            bounds.max.divideBy(tileSize)._floor());
+    this._removeOtherTiles(tileBounds);
+  },
+
+  _removeTile: function(key) {
+    var group = this._group;
+
+    for (var index in group.getLayers()) {
+      var layer = group.getLayers()[index];
+
+      if (layer && layer.key === key) {
+        group.removeLayer(layer);
+      }
+    }
+  },
+
+  updateCount: function(key, data) {
+    var oldCount = this._totalCount;
+    if (data && data[0]) {
+      for (var i in data) {
+        var cluster = data[i];
+
+        if (this._tiles.hasOwnProperty(key)) {
+          this._totalCount += cluster.count;
+        } else {
+          this._totalCount -= cluster.count;
+        }
+      }
+    }
+
+    if (oldCount != this._totalCount) {
+      if (this.options.updateCountCallback && typeof this.options.updateCountCallback === 'function') {
+        this.options.updateCountCallback.call(this, this._totalCount);
       }
     }
   },
@@ -224,6 +267,7 @@ L.TileCluster = L.Class.extend({
     }, this.options));
 
     var key = zoom + '_' + x + '_' + y;
+
     var self = this;
     L.Util.ajax(url, zoom,
       function(data, zoom) {
@@ -231,6 +275,25 @@ L.TileCluster = L.Class.extend({
         self._drawCluster(data, self, key, zoom);
       }
     );
+  },
+
+  _removeOtherTiles: function (bounds) {
+    this._removeConvexHull();
+
+    var kArr, x, y, key;
+
+    for (key in this._tiles) {
+      kArr = key.split('_');
+      x = parseInt(kArr[1], 10);
+      y = parseInt(kArr[2], 10);
+
+      // remove tile if it's out of bounds
+      if (x < bounds.min.x || x > bounds.max.x || y < bounds.min.y || y > bounds.max.y) {
+        delete this._tiles[key];
+        this._removeTile(key);
+        this.updateCount(key, this._cache[key]);
+      }
+    }
   },
 
   onRemove: function() {
@@ -272,6 +335,7 @@ L.TileCluster = L.Class.extend({
   },
 
   _drawCluster: function(data, self, key, zoom) {
+    self.updateCount(key, data);
     // Check if the zoom of cluster is the same of map
     if (data && data[0] && zoom == this._map.getZoom()) {
       for (var i in data) {

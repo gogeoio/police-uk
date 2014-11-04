@@ -39,6 +39,22 @@ body {
   cursor: pointer;
 }
 
+.timeline-slider {
+  position: absolute;
+  bottom: 10px;
+  left: 400px;
+  width: 200px;
+}
+
+.ngrs-value {
+  color: #000 !important;
+  background: #B3D1FF;
+}
+
+.ui-pnotify {
+  top: auto !important;
+}
+
 /* ---------------------------------------------------- */
 /*                                                      */
 /*                      Typeahead                       */

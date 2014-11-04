@@ -20,6 +20,12 @@
     <link href="assets/css/leaflet/plugins/draw/leaflet.draw.css" rel="stylesheet" />
     <link href="assets/css/leaflet/plugins/tilecluster/MarkerCluster.Default.css" rel="stylesheet" />
     <link href="assets/css/leaflet/plugins/tilecluster/MarkerCluster.css" rel="stylesheet" />
+    
+    <!-- Angular range-slider -->
+    <link href="assets/css/angular/angular-range-slider.css" rel="stylesheet" />
+
+    <!-- PNotify -->
+    <link href="assets/css/pnotify/pnotify.custom.css" rel="stylesheet" />
 
     <!-- App css -->
     <link href="assets/css/app.css" rel="stylesheet" />
@@ -31,8 +37,8 @@
       <leaflet class="custom-popup" defaults="defaults" center="london" layers="layers" overlays="overlays" controls="controls" width="100%" height="990px"></leaflet>
     </div>
 
-    <div class="container" ng-controller="QueryController">
-      <div class="row">
+    <div class="container">
+      <div class="row-fluid" ng-controller="QueryController">
         <div class="col-md-2 col-md-offset-4">
           <div style="position: absolute; top: 5px; z-index: 1000; background-color: rgba(255, 255, 255, 0.0);">
             <div class="form-group has-feedback">
@@ -144,7 +150,7 @@
     <script src="assets/javascript/lib/bootstrap/bootstrap-tour-standalone.min.js"></script>
 
     <!-- Google maps javascript -->
-    <script src="assets/javascript/lib/google/maps.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
 
     <!-- Leaflet and leaflet-plugins javascripts -->
     <script src="assets/javascript/lib/leaflet/leaflet.min.js"></script>
@@ -157,9 +163,15 @@
     <script src="assets/javascript/lib/angular/angular-leaflet-directive.js"></script>
     <script src="assets/javascript/lib/angular/dirPagination.js"></script>
 
+    <!-- Angular bootstrap slider -->
+    <script src="assets/javascript/lib/angular/angular-range-slider.js"></script>
+
     <!-- Typeahead -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular-strap/2.1.2/angular-strap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular-strap/2.1.2/angular-strap.tpl.min.js"></script>
+
+    <!-- PNotify -->
+    <script src="assets/javascript/lib/pnotify/pnotify.custom.min.js"></script>
 
     <!-- Charts javascripts -->
     <script src="assets/javascript/lib/d3/d3.js"></script>
@@ -172,6 +184,7 @@
     <script src="assets/javascript/controllers/dashboardController.js"></script>
     <script src="assets/javascript/controllers/queryController.js"></script>
     <script src="assets/javascript/controllers/tourController.js"></script>
+    <script src="assets/javascript/controllers/timeQueryController.js"></script>
     <script src="assets/javascript/services.js"></script>
 
     <script>

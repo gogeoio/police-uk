@@ -129,12 +129,15 @@ var MapController = function($scope, $rootScope, $timeout, $compile, services, l
   };
 
   // Create a cluster layer
-  $scope.createClusterLayer = function(geom, query) {
+  $scope.createClusterLayer = function(geom, query, timeQuery) {
     var options = {
       subdomains: services.config().subdomains,
       useJsonP: false,
       clickCallback: $scope.clickClusterCallback,
       clusterTooltip: 'Click here to view a chart\nby type of crime in this area.',
+      updateCountCallback: function(totalCount) {
+        $rootScope.$emit('event:updateClusterCount', totalCount);
+      },
       formatCount: function(count) {
         return $.number(count, 0, '.', '.');
       }
@@ -190,8 +193,31 @@ var MapController = function($scope, $rootScope, $timeout, $compile, services, l
   $scope.$watch('london.zoom',
     function(zoom) {
       $scope.handlerLayers(zoom);
-      $rootScope.$emit('event:updateGeoAggregation', $scope.geom, $scope.query);
       $scope.closePopup();
+
+      $rootScope.$emit('event:updateZoom', zoom);
+    }
+  );
+
+  $scope.getNeSwPoints = function(bounds) {
+    var ne = [bounds._northEast.lng, bounds._northEast.lat];
+    var sw = [bounds._southWest.lng, bounds._southWest.lat];
+
+    return [ne, sw];
+  };
+
+  $scope.$on('leafletDirectiveMap.moveend',
+    function() {
+      var layersDrawn = $scope.drawnItems.getLayers();
+
+      if (layersDrawn.length == 0) {
+        leafletData.getMap().then(
+          function(map) {
+            $scope.points = $scope.getNeSwPoints(map.getBounds());
+            $rootScope.$emit('event:updateGeoAggregation', $scope.geom, $scope.points, $scope.query)
+          }
+        );
+      }
     }
   );
 
@@ -200,7 +226,6 @@ var MapController = function($scope, $rootScope, $timeout, $compile, services, l
       $scope.zoom = zoom;
     }
     var overlays = $scope.gogeoLayers.overlays;
-
     var toUpdate = false;
 
     if ($scope.geom !== $scope.newGeom) {
@@ -208,18 +233,47 @@ var MapController = function($scope, $rootScope, $timeout, $compile, services, l
       toUpdate = true;
     }
 
-    if ($scope.query !== $scope.newQuery) {
+    if (JSON.stringify($scope.query) !== JSON.stringify($scope.newQuery)) {
       $scope.query = $scope.newQuery;
       toUpdate = true;
     }
 
+    if (JSON.stringify($scope.timeQuery) !== JSON.stringify($scope.newTimeQuery)) {
+      $scope.timeQuery = $scope.newTimeQuery;
+      toUpdate = true;
+    }
+
+    var boolQuery = null;
+
+    if ($scope.query && $scope.timeQuery) {
+      boolQuery = {
+        query: {
+          bool: {
+            must: [ $scope.timeQuery.query, $scope.query.query ]
+          }
+        }
+      };
+    } else if ($scope.query) {
+      boolQuery = $scope.query;
+    } else if ($scope.timeQuery) {
+      boolQuery = $scope.timeQuery;
+    }
+
     if (toUpdate) {
-      delete overlays.cluster;
+      console.log('bool query', JSON.stringify(boolQuery, null, 2));
       $timeout(
         function() {
-          overlays.cluster = $scope.createClusterLayer($scope.geom, $scope.query);
-          $rootScope.$emit('event:updateGeoAggregation', $scope.geom, $scope.query);
-        }
+          delete overlays.cluster;
+        },
+        10
+      );
+
+      $timeout(
+        function() {
+          overlays.cluster = $scope.createClusterLayer($scope.geom, boolQuery);
+          $rootScope.$emit('event:updateGeoAggregation', $scope.geom, $scope.points, boolQuery);
+        },
+        100
       );
     }
   };
@@ -259,6 +313,24 @@ var MapController = function($scope, $rootScope, $timeout, $compile, services, l
   $rootScope.$on('event:queryChanged',
     function(event, newQuery) {
       $scope.newQuery = newQuery;
+      $scope.handlerLayers($scope.zoom);
+      $scope.closePopup();
+    }
+  );
+
+  $rootScope.$on('event:dateUpdated',
+    function(event, minMonth, maxMonth) {
+      $scope.newTimeQuery = {
+        query: {
+          range: {
+            month: {
+              gte: minMonth,
+              lte: maxMonth
+            }
+          }
+        }
+      };
+
       $scope.handlerLayers($scope.zoom);
       $scope.closePopup();
     }
