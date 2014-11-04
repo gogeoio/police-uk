@@ -16,12 +16,12 @@ var NotifyController = function($scope, $rootScope) {
   $scope.updateText = function() {
     var text = [
       'Zoom level: ' + $scope.zoom,
-      'Processed records: ' + $.number($scope.geoAggCount, 0, '.', '.'),
+      'Processed records: ' + $scope.formatNumber($scope.geoAggCount),
       'Response time: ' + $scope.geoAggTime + ' ms'
     ];
 
     if ($scope.drawnArea) {
-      text.push('Area size analysis: ' + $scope.drawnArea + ' km2');
+      text.push('Area size analysis: ' + $scope.formatNumber($scope.drawnArea) + ' km2');
     }
 
     $scope.pnotify.update({text: text.join('\n')});
@@ -30,6 +30,10 @@ var NotifyController = function($scope, $rootScope) {
       $scope.pnotify.open();
     }
   };
+
+  $scope.formatNumber = function(number) {
+    return $.number(number, 0, '.', '.');
+  }
 
   $rootScope.$on('event:updateGeoAggCount',
     function(event, time, count) {
