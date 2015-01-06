@@ -41,7 +41,7 @@
         <div class="col-md-2 col-md-offset-3">
           <div style="position: absolute; top: 5px; z-index: 1000; background-color: rgba(255, 255, 255, 0.0);">
             <div class="form-group has-feedback">
-              <form class="" ng-submit="applyQuery()">
+              <form>
                 <input id="searchInput" ng-model="queryText" type="text" class="form-control" ng-options="crime for crime in crimeTypes" style="width: 400px;" data-animation="am-flip-x" placeholder="Search by crime types" bs-typeahead>
                 <i class="glyphicon glyphicon-remove form-control-feedback clear-input" ng-click="clearQuery()" style="top: 0px;"></i>
               </form>
@@ -147,11 +147,26 @@
       </div>
     </div>
 
+    <!-- TourController -->
     <div class="leaflet-control">
      <div class="tour-button-section" ng-controller="TourController">
         <div class="leaflet-draw leaflet-bar">
           <a id="help-button" title="Click to see the tour." href="#" ng-click="startTour(true)">
             <i class="fa fa-question-circle fa-lg"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- MapSelectorController -->
+    <div class="leaflet-control">
+      <div class="data-type-button-section" ng-controller="MapSelectorController">
+        <div class="leaflet-draw leaflet-bar">
+          <a class="leaflet-{{ clusterDisabled }}" id="cluster-map-button" role="button" title="Click to see cluster map." href="#" ng-click="showCluster()">
+            <i class="fa fa-bullseye fa-lg"></i>
+          </a>
+          <a class="leaflet-{{ markerDisabled }}" id="marker-map-button" role="button" title="Click to see marker map." href="#" ng-click="showMarker()">
+            <i class="fa fa-map-marker fa-lg"></i>
           </a>
         </div>
       </div>
@@ -205,6 +220,7 @@
     <script src="assets/javascript/controllers/queryController.js"></script>
     <script src="assets/javascript/controllers/tourController.js"></script>
     <script src="assets/javascript/controllers/timeQueryController.js"></script>
+    <script src="assets/javascript/controllers/mapSelectorController.js"></script>
     <script src="assets/javascript/services.js"></script>
 
     <script>

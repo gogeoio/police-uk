@@ -40,7 +40,7 @@ body {
 
 .timeline-slider {
   position: absolute;
-  top: 200px;
+  top: 260px;
   left: 10px;
   height: 100px;
 }
@@ -55,10 +55,16 @@ body {
   top: auto !important;
 }
 
+.data-type-button-section {
+  position: absolute;
+  top: 172px;
+  left: 10px;
+}
+
 .tour-button-section {
   position: absolute;
+  top: 234px;
   left: 10px;
-  top: 172px;
 }
 
 .tour-button-div {

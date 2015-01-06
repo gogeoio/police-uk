@@ -9,6 +9,8 @@ var MapController = function($scope, $rootScope, $timeout, $window, $compile, se
 
   $scope.mainGeoAggTotalCount = 0;
 
+  $rootScope.selectedLayer = 'cluster';
+
   var drawOptions = {
     draw: {
       draw: {
@@ -133,13 +135,22 @@ var MapController = function($scope, $rootScope, $timeout, $window, $compile, se
     }
   };
 
+  // Select which layer will show
+  $scope.createLayer = function(geom, query, timeQuery) {
+    if ($rootScope.selectedLayer === 'marker') {
+      return $scope.createMarkerLayer(geom, query, timeQuery);
+    } else {
+      return $scope.createClusterLayer(geom, query, timeQuery);
+    }
+  };
+
   // Create a cluster layer
   $scope.createClusterLayer = function(geom, query, timeQuery) {
     var options = {
       subdomains: services.config().subdomains,
       useJsonP: false,
       clickCallback: $scope.clickClusterCallback,
-      clusterTooltip: 'Click here to view a chart\nby type of crime in this area.',
+      clusterTooltip: 'Click here to view a chart\nby age ranges in this area.',
       updateCountCallback: function(totalCount) {
         $rootScope.$emit('event:updateClusterCount', totalCount);
       },
@@ -159,6 +170,20 @@ var MapController = function($scope, $rootScope, $timeout, $window, $compile, se
     }
   };
 
+  // Create a marker layer
+  $scope.createMarkerLayer = function(geom, query, timeQuery) {
+    var options = {
+      subdomains: services.config().subdomains
+    };
+
+    return  {
+      name: 'goGeo Tile Layer',
+      url: services.pngUrl(geom, query),
+      type: 'xyz',
+      visible: true
+    }
+  };
+
   $scope.gogeoLayers = {
     baselayers: {
       googleRoadmap: {
@@ -168,7 +193,7 @@ var MapController = function($scope, $rootScope, $timeout, $window, $compile, se
       }
     },
     overlays: {
-      cluster: $scope.createClusterLayer()
+      cluster: $scope.createLayer()
     }
   };
 
@@ -252,7 +277,7 @@ var MapController = function($scope, $rootScope, $timeout, $window, $compile, se
     if (zoom) {
       $scope.zoom = zoom;
     }
-    var overlays = $scope.gogeoLayers.overlays;
+
     var toUpdate = false;
 
     if ($scope.geom !== $scope.newGeom) {
@@ -270,24 +295,29 @@ var MapController = function($scope, $rootScope, $timeout, $window, $compile, se
       toUpdate = true;
     }
 
+    if (toUpdate) {
+      $scope.updateLayer();
+    }
+  };
+
+  $scope.updateLayer = function() {
+    var overlays = $scope.gogeoLayers.overlays;
     var boolQuery = $scope.getBoolQuery();
 
-    if (toUpdate) {
-      $timeout(
-        function() {
-          delete overlays.cluster;
-        },
-        10
-      );
+    $timeout(
+      function() {
+        delete overlays.cluster;
+      },
+      10
+    );
 
-      $timeout(
-        function() {
-          overlays.cluster = $scope.createClusterLayer($scope.geom, boolQuery);
-          $rootScope.$emit('event:updateGeoAggregation', $scope.geom, $scope.points, boolQuery);
-        },
-        100
-      );
-    }
+    $timeout(
+      function() {
+        overlays.cluster = $scope.createLayer($scope.geom, boolQuery);
+        $rootScope.$emit('event:updateGeoAggregation', $scope.geom, $scope.points, boolQuery);
+      },
+      100
+    );
   };
 
   $scope.drawHandler = function(event, leafletEvent) {
@@ -349,6 +379,13 @@ var MapController = function($scope, $rootScope, $timeout, $window, $compile, se
 
       $scope.handlerLayers($scope.zoom);
       $scope.closePopup();
+    }
+  );
+
+  $rootScope.$on('event:changeLayer',
+    function(event, selectedLayer) {
+      $rootScope.selectedLayer = selectedLayer;
+      $scope.updateLayer();
     }
   );
 };

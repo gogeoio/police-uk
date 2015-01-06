@@ -24,14 +24,19 @@ var QueryController = function($scope, $rootScope, services) {
     'Violence and sexual offences'
   ];
 
-  $scope.applyQuery = function() {
-    if ($scope.queryText && $scope.queryText.length != 0) {
-      var terms = $scope.queryText;
+  $scope.$on('$typeahead.select',
+    function(value, index) {
+      $scope.applyQuery();
+    }
+  );
 
+  $scope.applyQuery = function() {
+
+    if ($scope.queryText && $scope.queryText.length != 0) {
       $scope.query = {
         query: {
           terms: {
-            crime_type: [ terms ]
+            crime_type: [ $scope.queryText ]
           }
         }
       };

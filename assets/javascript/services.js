@@ -62,9 +62,7 @@
           url = url + '&buffer=16';
 
           // Add style to URL
-          if (style) {
-            url = url + '&stylename=' + style;
-          }
+          url = url + '&stylename=with_overlap';
 
           // Prevent angular cache
           url = url + '&_=' + Math.random();
