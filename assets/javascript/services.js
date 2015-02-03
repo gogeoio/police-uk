@@ -15,7 +15,9 @@
             collection: 'police_uk',
             clusterGeoAgg: 'crime_type',
             dashboardGeoAgg: 'falls_within',
-            mapkey: 'a9b6ed7c-0404-40e0-8c83-64cfcadd276d'
+            stylename: 'gogeo_overlap',
+            mapkey: 'a9b6ed7c-0404-40e0-8c83-64cfcadd276d',
+            prefix: 'maps.'
           }
         },
         canUseSubdomains: function(serviceName) {
@@ -26,7 +28,7 @@
           return false;
         },
         configureUrl: function(serviceName) {
-          var prefix = 'maps.';
+          var prefix = this.config().prefix;
           if (this.canUseSubdomains(serviceName)) {
             prefix = '{s}.';
           }
@@ -43,7 +45,7 @@
         pngUrl: function(geom, query) {
           var serviceName = 'tile.png';
 
-          var prefix = 'maps.';
+          var prefix = this.config().prefix;
           if (this.canUseSubdomains(serviceName)) {
             prefix = '{s}.';
           }
@@ -58,11 +60,18 @@
           url = url + '/{z}/{x}/{y}/' + serviceName;
           url = url + '?mapkey=' + mapkey;
 
-          // That is to not cut the marker.
-          url = url + '&buffer=16';
+          var stylename = this.config().stylename;
+          var buffer = 8;
+
+          if (stylename === 'gogeo_heatmap') {
+            // Avoid cut tile in heatmap view
+            buffer = 32;
+          }
+
+          url = url + '&buffer=' + buffer;
 
           // Add style to URL
-          url = url + '&stylename=with_overlap';
+          url = url + '&stylename=' + stylename;
 
           // Prevent angular cache
           url = url + '&_=' + Math.random();
@@ -73,6 +82,9 @@
           }
 
           if (query) {
+            if (typeof query === 'object') {
+              query = JSON.stringify(query);
+            }
             url = url + '&q=' + query;
           }
 

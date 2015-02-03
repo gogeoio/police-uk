@@ -27,7 +27,7 @@ L.Util.ajax = function(url, zoom, callback) {
   }
 
   var response, request = new XMLHttpRequest();
-  request.open("GET", url);
+  request.open('GET', url);
   request.onreadystatechange = function() {
     /*jshint evil: true */
     if (request.readyState === 4 && request.status === 200) {
