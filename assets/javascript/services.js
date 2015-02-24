@@ -9,7 +9,7 @@
         config: function() {
           return {
             protocol: 'http://',
-            url: 'gogeo.io',
+            url: 'gogeo.io/1.0',
             subdomains: ['m1', 'm2', 'm3', 'm4'],
             database: 'demos',
             collection: 'police_uk',
@@ -17,7 +17,7 @@
             dashboardGeoAgg: 'falls_within',
             stylename: 'gogeo_overlap',
             mapkey: 'a9b6ed7c-0404-40e0-8c83-64cfcadd276d',
-            prefix: 'maps.'
+            prefix: 'api.'
           }
         },
         canUseSubdomains: function(serviceName) {
