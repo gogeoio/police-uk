@@ -1,0 +1,55 @@
+<!-- Template from: http://bootsnipp.com/snippets/featured/blog-post-list-with-photo -->
+
+<div ng-controller="MarkerPopupController" class="container" style="width: 350px; margin-left: -25px;">
+  <div class="well">
+    <div class="media">
+      <div class="media-body">
+        <ul class="list-inline list-unstyled">
+          <li style="margin-bottom: 5px;" ng-show="tweetData['lsoa_name'].length > 0">
+            <span>
+              <b>Location: </b>
+            </span>
+            {{ tweetData['lsoa_name'].substring(0, tweetData['lsoa_name'].length - 5) }}
+            <span>
+              <a href="http://data.london.gov.uk/dataset/lsoa-atlas" style="color: black;" target="_blank">
+                <i class="fa fa-info-circle"></i>
+              </a>
+            </span>
+          </li>
+          <li style="margin-bottom: 5px;">
+            <span>
+              <b>Crime type: </b>
+            </span>
+            {{ tweetData['crime_type'] }}
+          </li>
+          <li style="margin-bottom: 5px;">
+            <span>
+              <b>Reported by:</b> 
+            </span>
+            {{ tweetData['reported_by'] }}
+          </li>
+          <li style="margin-bottom: 5px;">
+            <span>
+              <b>Falls Within:</b> 
+            </span>
+            {{ tweetData['falls_within'] }}
+          </li>
+          <li style="margin-bottom: 5px;">
+            <span>
+              <b>Street:</b> 
+            </span>
+            {{ tweetData['street'] | capitalize:true }}
+          </li>
+        </ul>
+        <ul class="list-inline list-unstyled">
+          <li>
+            <span>
+              <i class="glyphicon glyphicon-calendar"></i>
+              {{ tweetData.month | date : 'medium' }}
+            </span>
+          </li>
+        </ul>
+      </div>
+   </div>
+  </div>
+</div>

@@ -33,7 +33,7 @@
 
   <body>
     <div id="map" ng-controller="MapController">
-      <leaflet class="custom-popup" defaults="defaults" center="london" layers="layers" overlays="overlays" controls="controls" width="100%" style="width: 100%; height: 100%"></leaflet>
+      <leaflet defaults="defaults" center="london" layers="layers" overlays="overlays" controls="controls" width="100%" style="width: 100%; height: 100%"></leaflet>
     </div>
 
     <div class="container" style="width: 95%;">
@@ -52,29 +52,38 @@
 
       <div class="row-fluid" ng-controller="TimeQueryController">
         <div class="timeline-slider">
-          <div range-slider min="timelimit.range.min" orientation="vertical" on-handle-up="updateDate()" max="timelimit.range.max" model-min="timelimit.minMonth" model-max="timelimit.maxMonth" filter="date" filter-options="yyyy-MM" step="1" disabled="sliderDisabled"></div>
+          <div range-slider min="timelimit.range.min" orientation="horizontal" on-handle-up="updateDate()" max="timelimit.range.max" model-min="timelimit.minMonth" model-max="timelimit.maxMonth" filter="date" filter-options="yyyy-MM" step="1" disabled="sliderDisabled"></div>
         </div>
       </div>
     </div>
 
     <div id="geoagg-result-div" class="well">
       <div id="geoagg-result">
+        <div class="row">
+          <div class="col-md-7 text-center" style="display: block; float: left;">
+            <div style="display: block; float: left;">
+              <a href="https://twitter.com/gogeo_io" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false">@gogeo_io</a>
+              <script>
+                !function(d,s,id) {
+                  var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}
+                }(document, 'script', 'twitter-wjs');
+              </script>
+            </div>
+            <div style="display: block; float: left; margin-left: 5px;">
+              <div class="fb-follow" data-href="https://www.facebook.com/gogeoio" data-colorscheme="light" data-layout="button" data-show-faces="false"></div>
+            </div>
+          </div>
+          <div class="col-md-5">
+            <a href="http://gogeo.io" target="_blank">
+              <img src="assets/img/gogeo-brand.png" height="100%" width="100%">
+            </a>
+          </div>
+        </div>
+
         <div class="geoagg-result-subtitle">
           <h4>
             Real-time Geo Aggregation
           </h4>
-        </div>
-
-        <div class="geoagg-result-title">
-          <div class="row">
-            <div class="col-md-3 col-md-offset-3">
-            </div>
-            <div class="col-md-3 col-md-offset-1" style="right: -10px;">
-              <a href="http://gogeo.io" target="_blank">
-                <img src="assets/img/gogeo-brand.png" height="200%" width="200%">
-              </a>
-            </div>
-          </div>
         </div>
 
         <div ng-controller="DashboardController as dashboardCtrl">
@@ -221,6 +230,7 @@
     <script src="assets/javascript/controllers/tourController.js"></script>
     <script src="assets/javascript/controllers/timeQueryController.js"></script>
     <script src="assets/javascript/controllers/mapSelectorController.js"></script>
+    <script src="assets/javascript/controllers/markerPopupController.js"></script>
     <script src="assets/javascript/services.js"></script>
 
     <script>
@@ -238,6 +248,21 @@
 
         window._gaq = _gaq;
       }
+    </script>
+
+    <div id="fb-root"></div>
+    <script>
+      (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+
+        // var lang = navigator.language;
+        // lang = lang.split('-')[0] + '_' + lang.split('-')[1].toUpperCase();
+        // js.src = "//connect.facebook.net/" + lang + "/sdk.js#xfbml=1&appId=612856625513936&version=v2.0";
+        js.src = "//connect.facebook.net/pt_BR/sdk.js#xfbml=1&appId=612856625513936&version=v2.0";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
     </script>
   </body>
 </html>

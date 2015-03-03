@@ -9,7 +9,7 @@ var MapController = function($scope, $rootScope, $timeout, $window, $compile, se
 
   $scope.mainGeoAggTotalCount = 0;
 
-  $rootScope.selectedLayer = 'cluster';
+  $rootScope.selectedLayer = 'marker'; // cluster or marker
 
   var drawOptions = {
     draw: {
@@ -72,7 +72,11 @@ var MapController = function($scope, $rootScope, $timeout, $window, $compile, se
               $scope.clusterHull.addLayer(polygon);
             }
 
-            $scope.popup = L.popup()
+            var options = {
+              className: 'cluster-popup'
+            };
+
+            $scope.popup = L.popup(options)
             .setLatLng(latlng)
             .setContent(content)
             .openOn(map);
@@ -117,6 +121,60 @@ var MapController = function($scope, $rootScope, $timeout, $window, $compile, se
     }
   );
 
+  $scope.$on('leafletDirectiveMap.click',
+    function(event, leafletEvent) {
+      if ($scope.selectedLayer === 'marker' && $scope.drawnItems.getLayers().length == 0) {
+        leafletData.getMap().then(
+          function(map) {
+            $scope.onMapClick(map, leafletEvent.leafletEvent);
+          }
+        );
+      }
+    }
+  );
+
+  // Handle the click event
+  $scope.onMapClick = function(map, event) {
+    services.geosearch(event.latlng, map.getZoom(), $scope.query,
+      function(data) {
+        $scope.openTweetPopup(data, event.latlng, map);
+      }
+    );
+  };
+
+  $scope.openTweetPopup = function(data, latlng, map) {
+    if (data.length > 0) {
+      $scope.tweetData = data[0];
+      var pathname = window.location.pathname.trim();
+
+      if (pathname.lastIndexOf('/') !== (pathname.length - 1)) {
+        pathname = pathname + '/';
+      }
+
+      var path = '\'' + pathname + 'assets/javascript/views/crime-template.html\'';
+      var content = '<div " ng-include="' + path + '"></div>';
+
+      $timeout(
+        function() {
+          $scope.$apply(
+            function() {
+              var options = {
+                className: 'marker-popup',
+                offset: new L.Point(4, -50)
+              };
+
+              $scope.markerPopup = L.popup(options)
+                .setLatLng(latlng)
+                .setContent(content)
+                .openOn(map);
+            }
+          );
+        },
+        0
+      );
+    }
+  };
+
   $scope.removeCurrentHull = function(event, leafletEvent) {
     if ($scope.clusterHull.hasLayer($scope.currentHull)) {
       $scope.clusterHull.removeLayer($scope.currentHull);
@@ -126,10 +184,18 @@ var MapController = function($scope, $rootScope, $timeout, $window, $compile, se
   $scope.$on('leafletDirectiveMap.popupclose', $scope.removeCurrentHull);
 
   $scope.closePopup = function() {
-    if ($scope.popup) {
+    if ($scope.clusterChartPopup) {
       leafletData.getMap().then(
         function(map) {
-          map.closePopup($scope.popup);
+          map.closePopup($scope.clusterChartPopup);
+        }
+      );
+    }
+
+    if ($scope.markerPopup) {
+      leafletData.getMap().then(
+        function(map) {
+          map.closePopup($scope.markerPopup);
         }
       );
     }
@@ -321,13 +387,24 @@ var MapController = function($scope, $rootScope, $timeout, $window, $compile, se
   };
 
   $scope.drawHandler = function(event, leafletEvent) {
-    var layer = leafletEvent.leafletEvent.layer;
+
+    var layer = leafletEvent.leafletEvent.layer || $scope.drawnItems.getLayers()[0];
+    $scope.closePopup();
 
     if (layer) {
       $scope.drawnItems.clearLayers();
       $scope.drawnItems.addLayer(layer);
+      $scope.canOpenPopup = true;
+
+      layer.on('click',
+        function(clickEvent) {
+          if ($scope.selectedLayer === 'marker' && $scope.canOpenPopup) {
+            $scope.onMapClick(clickEvent.target._map, clickEvent);
+          }
+        }
+      );
     } else {
-      layer = $scope.drawnItems.getLayers()[0];
+      $scope.canOpenPopup = false;
       $scope.closePopup();
       $scope.removeCurrentHull();
     }
@@ -337,13 +414,14 @@ var MapController = function($scope, $rootScope, $timeout, $window, $compile, se
       $scope.newGeom = JSON.stringify(geojson.geometry);
 
       if (window._gaq) {
-        _gaq.push(['_trackEvent', 'police-uk', 'draw:created']);
+        window._gaq.push(['_trackEvent', services.config().demoName, 'draw:created']);
       }
 
       var area = (LGeo.area(layer) / 1000000).toFixed(2);
       $rootScope.$emit('event:updateDrawnArea', area);
     } else {
       $scope.newGeom = null;
+      $scope.points = null;
       $scope.closePopup();
       $scope.removeCurrentHull();
       $rootScope.$emit('event:updateDrawnArea', null);
@@ -355,6 +433,11 @@ var MapController = function($scope, $rootScope, $timeout, $window, $compile, se
   $scope.$on('leafletDirectiveMap.draw:created', $scope.drawHandler);
   $scope.$on('leafletDirectiveMap.draw:deleted', $scope.drawHandler);
   $scope.$on('leafletDirectiveMap.draw:edited', $scope.drawHandler);
+  $scope.$on('leafletDirectiveMap.draw:deletestart',
+    function() {
+      $scope.canOpenPopup = false;
+    }
+  );
 
   $rootScope.$on('event:queryChanged',
     function(event, newQuery) {

@@ -42,7 +42,7 @@ var QueryController = function($scope, $rootScope, services) {
       };
 
       if (window._gaq) {
-        _gaq.push(['_trackEvent', 'police-uk', 'search', $scope.queryText.toLowerCase()]);
+        _gaq.push(['_trackEvent', services.config().demoName, 'search', $scope.queryText.toLowerCase()]);
       }
     } else {
       $scope.query = null;

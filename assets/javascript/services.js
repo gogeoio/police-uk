@@ -8,6 +8,7 @@
       return {
         config: function() {
           return {
+            demoName: 'police-uk',
             protocol: 'http://',
             url: 'gogeo.io/1.0',
             subdomains: ['m1', 'm2', 'm3', 'm4'],
@@ -15,7 +16,7 @@
             collection: 'police_uk',
             clusterGeoAgg: 'crime_type',
             dashboardGeoAgg: 'falls_within',
-            stylename: 'gogeo_overlap',
+            stylename: 'gogeo_many_points',
             mapkey: 'a9b6ed7c-0404-40e0-8c83-64cfcadd276d',
             prefix: 'api.'
           }
@@ -185,6 +186,44 @@
               );
             }
           );
+        },
+        geosearch: function(latlng, zoom, query, callback) {
+          var point = {
+            type: 'Point',
+            coordinates: [latlng.lng, latlng.lat]
+          };
+
+          // Determine the pixel distance in kilometers to a given latitude and zoom level
+          // See "http://wiki.openstreetmap.org/wiki/Zoom_levels" for details
+          var pixelDist = 40075 * Math.cos((latlng.lat * Math.PI / 180)) / Math.pow(2,(zoom + 8));
+
+          var host = this.configureUrl('geosearch');
+          var database = this.config().database;
+          var collection = this.config().collection;
+          var mapkey = this.config().mapkey;
+
+          var geoSearchUrl = host + '/geosearch/' + database + '/' + collection + '?mapkey=' + mapkey;
+
+          var options = {
+            limit: 1, // How many items to return
+            buffer: pixelDist * 16, // Define a buffer with half marker size
+            buffer_measure: 'kilometer',
+            geom: point,
+            fields: [
+              'lsoa_name',
+              'crime_type',
+              'street',
+              'month',
+              'reported_by',
+              'falls_within'
+            ]
+          };
+
+          if (query) {
+            options.q = JSON.stringify(query);
+          }
+
+          $http.post(geoSearchUrl, options).success(callback);
         }
       }
     }
