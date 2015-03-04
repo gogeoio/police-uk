@@ -137,14 +137,14 @@ var MapController = function($scope, $rootScope, $timeout, $window, $compile, se
   $scope.onMapClick = function(map, event) {
     services.geosearch(event.latlng, map.getZoom(), $scope.query,
       function(data) {
-        $scope.openTweetPopup(data, event.latlng, map);
+        $scope.openMarkerPopup(data, event.latlng, map);
       }
     );
   };
 
-  $scope.openTweetPopup = function(data, latlng, map) {
+  $scope.openMarkerPopup = function(data, latlng, map) {
     if (data.length > 0) {
-      $scope.tweetData = data[0];
+      $scope.markerData = data[0];
       var pathname = window.location.pathname.trim();
 
       if (pathname.lastIndexOf('/') !== (pathname.length - 1)) {
