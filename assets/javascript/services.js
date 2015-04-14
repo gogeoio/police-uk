@@ -10,15 +10,15 @@
           return {
             demoName: 'police-uk',
             protocol: 'http://',
-            url: 'gogeo.io/1.0',
-            subdomains: ['m1', 'm2', 'm3', 'm4'],
+            url: 'demos.gogeo.io/1.0',
+            subdomains: ['m01', 'm02', 'm03', 'm04'],
             database: 'demos',
             collection: 'police_uk',
             clusterGeoAgg: 'crime_type',
             dashboardGeoAgg: 'falls_within',
             stylename: 'gogeo_many_points',
-            mapkey: 'a9b6ed7c-0404-40e0-8c83-64cfcadd276d',
-            prefix: 'api.'
+            mapkey: '5db514e30b9f340eda00671230d5136855ae14d7',
+            prefix: 'maps.'
           }
         },
         canUseSubdomains: function(serviceName) {
