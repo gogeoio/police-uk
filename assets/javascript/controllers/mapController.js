@@ -253,9 +253,13 @@ var MapController = function($scope, $rootScope, $timeout, $window, $compile, se
   $scope.gogeoLayers = {
     baselayers: {
       googleRoadmap: {
-        name: 'Google Streets',
-        layerType: 'ROADMAP',
-        type: 'google'
+        // name: 'Google Streets',
+        // layerType: 'ROADMAP',
+        // type: 'google'
+        name: 'goGeo Tile Layer',
+        url: "http://{s}.api.internal.tomtom.com/lbs/map/3/basic/1/{z}/{x}/{y}.png?key=8r734zursdrdrvcejfhedk8q&l=en&v=3",
+        type: 'xyz',
+        visible: true
       }
     },
     overlays: {
